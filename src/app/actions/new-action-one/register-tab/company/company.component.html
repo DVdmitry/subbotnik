@@ -1,0 +1,91 @@
+<div class="demo-tab-content">
+  <div class="go-flex-no-space">
+    <div>
+      <label for="companyName">Как называется ваша организация?</label>
+      <div matTooltip='Чтобы к вашей акции было больше доверия лучше указать название организации'
+           class="formwide-tooltip small-placeholder">
+        <mat-form-field>
+          <input matInput id="companyName" placeholder="Название организации" required>
+        </mat-form-field>
+      </div>
+    </div>
+    <div>
+      <label for="companyPhoto" class = "upload-photo">Ваш логотип</label>
+      <div matTooltip='Чтобы к вашей акции было больше доверия лучше загрузить логотип вашей организации'
+           class="formwide-tooltip upload-photo">
+        <input type="file" id="companyPhoto" placeholder="Фото не выбрано">
+      </div>
+    </div>
+  </div>
+
+  <mat-card class="example-card">
+    <mat-card-header>
+      <div matTooltip='Оставьте свои контактные данные, чтобы волонтеры могли с вами связаться'
+           class="formwide-tooltip">
+        <mat-card-title class="new-action"><label for="companyPhone">Как с вами связаться?</label></mat-card-title>
+      </div>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="go-flex-no-space">
+        <div matTooltip='Если с вами можно связаться по нескольким номерам, для надежности лучше указать все.
+                           При этом первый номер будет считаться основным, а последующие - дополнительными'
+             class="formwide-tooltip">
+          <mat-form-field>
+            <span matPrefix>+375 - &nbsp;</span>
+            <input matInput id="companyPhone" placeholder="Контактный номер" type="tel" required>
+          </mat-form-field>
+        </div>
+        <button mat-icon-button>
+          <mat-icon aria-label="Example icon-button with a heart icon">add_circle_outline</mat-icon>
+        </button>
+      </div>
+
+      <div class="go-flex-no-space">
+        <div matTooltip='Сюда будут приходить уведомления и напоминания по акции' class="formwide-tooltip">
+          <mat-form-field>
+            <input matInput id="companyPost" placeholder="Электронная почта" type="email" required>
+          </mat-form-field>
+        </div>
+        <button mat-icon-button>
+          <mat-icon aria-label="Example icon-button with a heart icon">add_circle_outline</mat-icon>
+        </button>
+      </div>
+
+      <div class="go-flex-no-space">
+        <div matTooltip='Это может быть ваш личный сайт или блог, профиль ВКонтакте, Facebook или LinkedIn,
+                          где о вас можно найти больше информации, и, при необходимости, связаться'
+             class="formwide-tooltip">
+          <mat-form-field>
+            <input matInput id="companyWeb" placeholder="Сайт или соц.сеть" type="text">
+          </mat-form-field>
+        </div>
+        <button mat-icon-button>
+          <mat-icon aria-label="Example icon-button with a heart icon">add_circle_outline</mat-icon>
+        </button>
+      </div>
+
+      <div class="go-flex-no-space">
+        <div matTooltip='Будет лучше, если волонтеры будут знать, с кем именно они будут общаться по указанным контактам'
+             class="formwide-tooltip">
+          <mat-form-field>
+            <input matInput id="companyContact" placeholder="Контактное лицо" type="text">
+          </mat-form-field>
+        </div>
+        <button mat-icon-button>
+          <mat-icon aria-label="Example icon-button with a heart icon">add_circle_outline</mat-icon>
+        </button>
+      </div>
+
+      <p>Что бы вы хотели добавить?</p>
+      <div matTooltip='Напишите чем занимается ваша организация, почему решили организовать акцию и т.д.' class="formwide-tooltip">
+        <div>
+          <p>
+            <mat-form-field class="example-full-width">
+              <textarea matInput rows = 3 placeholder="Мы хотим сделать мир лучше..."></textarea>
+            </mat-form-field>
+          </p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

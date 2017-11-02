@@ -1,0 +1,31 @@
+    <div matTooltip='Начните вводить название и выберите подходящее из предложенного списка, а мы покажем этот
+                      населенный пункт на карте, чтобы вы быстрее смогли найти нужное место' class="formwide-tooltip
+                      small-placeholder">
+      <mat-form-field>
+        <input id="actionPlace" matInput placeholder="Ближайший населенный пункт*" autocorrect="off" autocapitalize="off"
+               spellcheck="off" type="text" class="form-control" #search [formControl]="searchControl"
+               [(ngModel)]="place">
+      </mat-form-field>
+    </div>
+
+  <div *ngIf="place && place.length > 2">
+    <p>Укажите конкретное место на карте</p>
+    <div class = "go-flex-no-space">
+      <button mat-button color="basic" class = "map-view-btn" (click)="switchMapView('roadMap')" [class.selected-btn]="mapView === 'roadMap'">Карта</button>
+      <button mat-button color="basic" class = "map-view-btn" (click)="switchMapView('satellite')" [class.selected-btn]="mapView === 'satellite'">Спутник</button>
+      <button mat-button color="basic" class = "map-view-btn" (click)="switchMapView('hybrid')" [class.selected-btn]="mapView === 'hybrid'">Гибридный вид</button>
+    </div>
+
+    <agm-map *ngIf = "mapView === 'roadMap'" [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom" [mapTypeId]="'roadmap'" >
+      <agm-marker [markerDraggable]="true" (dragEnd)="markerMoved($event)"  [latitude]="latitude || 39.8282" [longitude]="longitude || -98.5795"></agm-marker>
+    </agm-map>
+
+    <agm-map *ngIf = "mapView === 'satellite'" [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom" [mapTypeId]="'satellite'" >
+      <agm-marker [markerDraggable]="true" (dragEnd)="markerMoved($event)"  [latitude]="latitude || 39.8282" [longitude]="longitude || -98.5795"></agm-marker>
+    </agm-map>
+
+    <agm-map *ngIf = "mapView === 'hybrid'" [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom" [mapTypeId]="'hybrid'" >
+      <agm-marker [markerDraggable]="true" (dragEnd)="markerMoved($event)"  [latitude]="latitude || 39.8282" [longitude]="longitude || -98.5795"></agm-marker>
+    </agm-map>
+  </div>
+

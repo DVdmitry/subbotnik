@@ -1,0 +1,12 @@
+.new-action {
+  display: block;
+  color: white;
+  font-size: x-large;
+  padding: 0;
+  margin-left: -4%;
+}
+
+mat-horizontal-stepper{
+  background-color: transparent;
+}
+

@@ -1,0 +1,161 @@
+<!--<button mat-raised-button (click)="isLinear = true" id="toggle-linear">Enable linear mode</button>-->
+<mat-card>
+  <mat-card-content>
+    <p class="mat-body-1">Чтобы создать страницу акции на subbotnik.by, нужно указать
+      информацию, которая будет интересна и важна для потенциальных волонтёров: что это
+      за акция, когда и где она пройдёт, кто её организует, что нужно для участия в ней.
+      Предлагаем внести все эти данные в 3 простых шага. Обязательные поля отмечены
+      звёздочкой (*).</p>
+  </mat-card-content>
+</mat-card>
+<mat-card>
+  <mat-card-content>
+    <div *ngIf="userAction">
+      <mat-horizontal-stepper [linear]="isLinear">
+        <mat-step [stepControl]="firstFormGroup">
+          <form [formGroup]="firstFormGroup" (ngSubmit)="addPost(firstFormGroup.value)">
+            <ng-template matStepLabel>Основная информация</ng-template>
+            <p>Как называется ваша акция?</p>
+            <div matTooltip='Например: Субботник в Осмоловке или Уборка левого берега р. Свислочь'
+                 class="formwide-tooltip">
+              <mat-form-field>
+                <input matInput placeholder="Название акции" formControlName="eventName" required>
+              </mat-form-field>
+            </div>
+            <p class="mat-body-1">Где акция будет проводиться?</p>
+            <app-map></app-map>
+            <div [class.disabled]="showInterval">
+              <label for="actionDate">Когда будет проводится акция?</label>
+              <div matTooltip='Укажите дату, время начала и окончания акции (если уже знаете их)'
+                   class="formwide-tooltip small-placeholder">
+
+
+                <mat-form-field class="go-flex pos-relative" [hideRequiredMarker]="firstFormGroup.value.showInterval">
+                  <input matInput class='pos-abs' disabled>
+                  <input matInput class='formwide-tooltip' id="actionDate" type="text" formControlName="exactDate"
+                         [matDatepicker]="picker" required>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+
+
+                <div class="time-form go-flex" name="time-form">
+                  <p>c</p>
+                  <mat-form-field class="time-field" [hideRequiredMarker]="firstFormGroup.value.showInterval">
+                    <input matInput type="time" formControlName="startTime" required>
+                  </mat-form-field>
+                  <p>до</p>
+                  <mat-form-field class="time-field">
+                    <input matInput type="time" formControlName="finishTime">
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+            <mat-checkbox formControlName="showInterval" (change)="customInterval()"> Я еще не знаю точную дату и время
+              проведения акции
+            </mat-checkbox>
+
+            <div *ngIf='showInterval'>
+
+              <div matTooltip='Дату и время акции можно будет уточнить в дальнейшем, отредактировав страницу акции.
+                           Все подписавшиеся на акцию волонтеры получат об этом уведомление, так что все будут в курсе.'
+                   class="formwide-tooltip">
+                <label for="actionStartInterval"> Укажите хотя бы примерный период, в который планируете провести
+                  акцию</label>
+                <div class="go-flex">
+                  <p class = "padding">c</p>
+                  <mat-form-field class='pos-relative' [hideRequiredMarker]="!firstFormGroup.value.showInterval">
+                    <input matInput class='pos-abs' disabled>
+                    <input matInput id="actionStartInterval" [matDatepicker]="pickerStartInterval" type="text"
+                           formControlName="eventStartInterval" required>
+                    <mat-datepicker-toggle matSuffix [for]="pickerStartInterval"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerStartInterval></mat-datepicker>
+                  </mat-form-field>
+                  <p class = "padding">по</p>
+                  <mat-form-field class='pos-relative' [hideRequiredMarker]="!firstFormGroup.value.showInterval">
+                    <input matInput class='pos-abs' disabled >
+                    <input matInput [matDatepicker]="pickerEndInterval" type="text"
+                           formControlName="eventFinishInterval" required>
+                    <mat-datepicker-toggle matSuffix [for]="pickerEndInterval"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerEndInterval></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+            <div class="block-text-center">
+              <button mat-button matStepperNext type="submit" [disabled]="!firstFormGroup.valid" class="next-action">
+                Далее
+              </button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="secondFormGroup">
+          <form [formGroup]="secondFormGroup">
+            <ng-template matStepLabel>Информация об организаторах</ng-template>
+            <app-register-tab></app-register-tab>
+            <div class="go-flex">
+              <button mat-button matStepperPrevious>Назад</button>
+              <button mat-button matStepperNext>Далее</button>
+            </div>
+          </form>
+        </mat-step>
+
+        <mat-step [stepControl]="thirdFormGroup">
+          <form [formGroup]="thirdFormGroup">
+            <ng-template matStepLabel>Подробности акции</ng-template>
+
+            <p class="subheading-1">Пожалуйста, загрузите мотивирующее фото</p>
+            <div class="box-upload-picture block-text-center">
+              <br>
+              <label class="blue" for="citizenPhoto">Загрузить изображение</label>
+              <input class="invisible" type="file" id="citizenPhoto" placeholder="Фото не выбрано">
+              <br>
+              <p class="mat-body-1">Нажмите или перетащите изображение сюда*</p>
+            </div>
+            <p class="mat-body-1 small-placeholder ">*Объем фото должен быть до ХХХ пикселей</p>
+            <p class="mat-body-1">Где будет место сбора волонтеров?</p>
+            <app-map></app-map>
+
+            <label for="getToPlace">Напишите как можно добраться до места встречи?</label>
+            <p>
+              <mat-form-field class="example-full-width">
+                <textarea id="getToPlace" matInput rows=3 placeholder="Если на автобусе..."></textarea>
+              </mat-form-field>
+            </p>
+
+            <label for="toDo">Что надо будет делать?</label>
+            <p>
+              <mat-form-field class="example-full-width">
+                <textarea id="toDo" matInput rows=3 placeholder="Планируются работы..."></textarea>
+              </mat-form-field>
+            </p>
+
+            <label for="equipment">Что нужно взять с собой? Что выдадут на месте?</label>
+            <p>
+              <mat-form-field class="example-full-width">
+                <textarea id="equipment" matInput rows=3 placeholder="Возьмите с собой..."></textarea>
+              </mat-form-field>
+            </p>
+
+
+            <label for="participants">Минимальное количество участников</label>
+            <p>
+              <mat-form-field class="time-field">
+                <input matInput type="number" id="participants">
+              </mat-form-field>
+            </p>
+
+            <div class="go-flex">
+              <button mat-button matStepperPrevious>Назад</button>
+              <button mat-button>Предпросмотр страницы акции</button>
+            </div>
+          </form>
+        </mat-step>
+      </mat-horizontal-stepper>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+

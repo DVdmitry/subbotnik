@@ -1,20 +1,87 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { MatButtonModule, MatCardModule, MatMenuModule,
+  MatToolbarModule, MatIconModule, MatFormFieldModule,
+  MatInputModule, MatDatepickerModule, MAT_DATE_LOCALE,
+  MatNativeDateModule, MatTooltipModule, MatStepperModule,
+  MatSelectModule, MatExpansionModule, MatTabsModule, MatCheckboxModule} from '@angular/material';
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { InMemoryDataService } from './in-memory-data.service';
+import { AppService } from './app-service';
+import { RouterModule } from '@angular/router';
+import { NgModule } from '@angular/core';
+
+import { AgmCoreModule } from '@agm/core';
 
 import { AppComponent } from './app.component';
+import { NavComponent} from './nav/nav.component';
+import { StepOneRegisterActionComponent } from './actions/new-action-one/step-one-register-action.component';
+import { MakeActionComponent } from './actions/make-action/make-action.component';
+import { MapComponent } from './shared/map/map.component';
+import { RegisterTabComponent } from './actions/new-action-one/register-tab/register-tab.component';
+import { CitizenComponent } from './actions/new-action-one/register-tab/citizen/citizen.component';
+import { CompanyComponent } from './actions/new-action-one/register-tab/company/company.component';
+
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    NavComponent,
+    StepOneRegisterActionComponent,
+    MakeActionComponent,
+    MapComponent,
+    RegisterTabComponent,
+    CitizenComponent,
+    CompanyComponent,
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatCardModule,
+    MatMenuModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatFormFieldModule,
     FormsModule,
-    HttpModule
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatTooltipModule,
+    MatStepperModule,
+    MatSelectModule,
+    MatTabsModule,
+    MatExpansionModule,
+    MatCheckboxModule,
+    HttpModule,
+    ReactiveFormsModule,
+    InMemoryWebApiModule.forRoot(InMemoryDataService),
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyBj42L1LGSA875C7wVr9p_Yta2TJeCHKY8',
+      libraries: ['places']
+    }),
+    RouterModule.forRoot([
+      {
+        path: 'main',
+        component: MakeActionComponent
+      },
+      {
+        path: '',
+        redirectTo: '/main',
+        pathMatch: 'full'
+      },
+      {
+        path: 'main/create-event-page',
+        component: StepOneRegisterActionComponent
+      },
+    ])
   ],
-  providers: [],
+  providers: [AppService,
+    {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+

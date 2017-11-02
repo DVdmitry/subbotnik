@@ -1,1 +1,111 @@
-/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+a {
+  text-decoration: none;
+}
+
+.formwide-tooltip {
+  max-width: 250px;
+}
+
+.time-field {
+  width: 80px;
+}
+
+.time-form {
+  margin: -1.5% 0 0 3%;
+}
+
+.go-flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+.time-form p .marg-top-8{
+  margin-top: 8%;
+}
+
+.exp-panel-new-action {
+  width: 30%;
+}
+
+.block-text-center {
+  font-size: x-large;
+  text-align: center;
+}
+
+.small-placeholder {
+  font-size: small;
+}
+
+.demo-tab-group {
+  border: 1px solid #e8e8e8;
+}
+
+.demo-tab-content {
+  padding: 16px;
+}
+.go-flex-no-space {
+  display: flex;
+}
+
+.upload-photo {
+  margin-left: 3%;
+}
+#citizenPhoto {
+  margin-top: 6%;
+}
+
+.border {
+  border: groove  red;
+}
+
+.box-upload-picture {
+  border: dotted #80878C;
+  height: 150px;
+  max-width: 300px;
+}
+
+.blue {
+  color: #3C85FE;
+}
+
+.invisible {
+  display: none;
+}
+
+.disabled {
+  pointer-events: none;
+  color: #e8e8e8;
+}
+
+.mat-horizontal-stepper-header {
+  pointer-events: none;
+}
+
+.satellite-btn {
+  position: absolute;
+  color: red;
+  font-size: 40px;
+  top: 10%;
+  left: 10%;
+}
+
+.pos-relative {
+  position: relative;
+}
+
+.selected-btn {
+  background-color: #e8e8e8;
+}
+.disable {
+  pointer-events: none;
+
+}
+.pos-abs {
+  position: absolute;
+}
+
+.padding {
+  padding: 1% 3% 0 3%;
+}

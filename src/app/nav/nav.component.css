@@ -1,0 +1,24 @@
+ul {
+  list-style: none;
+  display: flex;
+}
+li {
+  padding: 1em;
+  transition: all .5s ease-in-out;
+}
+a {
+  color: white;
+  text-decoration: none;
+  transition: all .5s ease-in-out;
+}
+li:hover{
+  transform: scale(1.1);
+  color: aqua;
+}
+.nav-container{
+  position: relative;
+  height: 1em;
+}
+
+
+
