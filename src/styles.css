@@ -34,6 +34,10 @@ a {
   text-align: center;
 }
 
+.block-text-right{
+  text-align: right;
+}
+
 .small-placeholder {
   font-size: small;
 }

@@ -17,9 +17,11 @@ export class StepOneRegisterActionComponent implements OnInit {
   exactDate = '';
   startTime = '';
   finishTime = '';
-  eventStartInterval = '';
+  eventStartInterval: any;
   eventFinishInterval = '';
   showInterval = false;
+  minDate = new Date();
+  maxDate = new Date(+this.minDate + 31536000000);
   secondFormGroup: FormGroup;
   thirdFormGroup: FormGroup;
   constructor (private service: AppService, private _formBuilder: FormBuilder) {}
@@ -28,11 +30,9 @@ export class StepOneRegisterActionComponent implements OnInit {
     this.firstFormGroup = this._formBuilder.group({
       eventName: ['', Validators.compose([Validators.required,
         Validators.minLength(2)])],
-      exactDate: [null, Validators.nullValidator],
-      startTime: [null, Validators.nullValidator],
-      finishTime: [null, Validators.nullValidator],
-      eventStartInterval: [null, Validators.nullValidator],
-      eventFinishInterval: [null, Validators.nullValidator],
+      exactDate: ['', Validators.compose([Validators.required, Validators.nullValidator])],
+      startTime: ['', Validators.compose([Validators.required, Validators.nullValidator])],
+      finishTime: ['', Validators.nullValidator],
       showInterval: false
     });
     this.secondFormGroup = this._formBuilder.group({
@@ -41,6 +41,7 @@ export class StepOneRegisterActionComponent implements OnInit {
     this.thirdFormGroup = this._formBuilder.group({
       thirdCtrl: ['', Validators.required]
     });
+
   }
   addPost(post): void {
     this.eventName = post.eventName;
@@ -49,14 +50,31 @@ export class StepOneRegisterActionComponent implements OnInit {
     this.finishTime = post.finishTime;
     this.eventStartInterval = post.eventStartInterval;
     this.eventFinishInterval = post.eventFinishInterval;
-
+    console.log(post);
   }
   customInterval(): void {
     if (!this.showInterval) {
       this.showInterval = true;
-    } else {
+      this.firstFormGroup = this._formBuilder.group({
+        eventName: ['', Validators.compose([Validators.required,
+          Validators.minLength(2)])],
+        eventStartInterval: ['', Validators.compose([Validators.required, Validators.nullValidator])],
+        eventFinishInterval: ['', Validators.compose([Validators.required, Validators.nullValidator])],
+      });
+      } else {
       this.showInterval = false;
+      this.firstFormGroup = this._formBuilder.group({
+        eventName: ['', Validators.compose([Validators.required,
+          Validators.minLength(2)])],
+        exactDate: ['', Validators.compose([Validators.required, Validators.nullValidator])],
+        startTime: ['', Validators.compose([Validators.required, Validators.nullValidator])],
+        finishTime: ['', Validators.nullValidator],
+        showInterval: false
+      });
     }
   }
-
+  minInterval(date): void {
+    this.eventStartInterval = new Date(+date.eventStartInterval + 86400000);
+    console.log(this.eventStartInterval);
+  }
 }

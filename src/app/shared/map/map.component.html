@@ -1,15 +1,13 @@
-    <div matTooltip='Начните вводить название и выберите подходящее из предложенного списка, а мы покажем этот
-                      населенный пункт на карте, чтобы вы быстрее смогли найти нужное место' class="formwide-tooltip
+    <div matTooltip='Начните вводить название и выберите подходящее из предложенного списка, а мы покажем этот населённый пункт на карте, чтобы вы быстрее смогли найти нужное место' class="formwide-tooltip
                       small-placeholder">
       <mat-form-field>
-        <input id="actionPlace" matInput placeholder="Ближайший населенный пункт*" autocorrect="off" autocapitalize="off"
-               spellcheck="off" type="text" class="form-control" #search [formControl]="searchControl"
-               [(ngModel)]="place">
+        <input id="actionPlace" matInput placeholder="Ближайший населенный пункт" autocorrect="off" autocapitalize="off"
+               spellcheck="off" type="text" class="form-control" #search [formControl]="searchControl" [(ngModel)]="place">
       </mat-form-field>
     </div>
 
   <div *ngIf="place && place.length > 2">
-    <p>Укажите конкретное место на карте</p>
+    <p>Укажите конкретное место проведения на карте</p>
     <div class = "go-flex-no-space">
       <button mat-button color="basic" class = "map-view-btn" (click)="switchMapView('roadMap')" [class.selected-btn]="mapView === 'roadMap'">Карта</button>
       <button mat-button color="basic" class = "map-view-btn" (click)="switchMapView('satellite')" [class.selected-btn]="mapView === 'satellite'">Спутник</button>

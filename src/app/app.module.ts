@@ -79,7 +79,7 @@ import { CompanyComponent } from './actions/new-action-one/register-tab/company/
     ])
   ],
   providers: [AppService,
-    {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},
+    {provide: MAT_DATE_LOCALE, useValue: 'ru-RU'},
     ],
   bootstrap: [AppComponent]
 })
