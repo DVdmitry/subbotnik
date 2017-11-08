@@ -265,9 +265,6 @@
                                 <input matInput id="companyPost" placeholder="Электронная почта" formControlName="usersEmail" type="email" required>
                               </mat-form-field>
                             </div>
-                            <button mat-icon-button>
-                              <mat-icon aria-label="Example icon-button with a heart icon">add_circle_outline</mat-icon>
-                            </button>
                           </div>
 
                           <div class="go-flex-no-space">
@@ -284,6 +281,13 @@
                             </button>
                           </div>
 
+                          <div *ngIf = "sites[0] && sites[0].length > 5">
+                            <div *ngFor = "let site of sites" class="go-flex-no-space">
+                              <mat-form-field>
+                                <input matInput id="companySite{{sites.length}}" placeholder="Сайт или соц.сеть" type="text" formControlName="siteAdd{{sites.length}}">
+                              </mat-form-field>
+                            </div>
+                          </div>
 
                           <div class="go-flex-no-space">
                             <div matTooltip='Укажите имя и фамилию того, с кем будут связываться волонтёры. Чтобы к вашей акции было больше доверия
@@ -293,11 +297,9 @@
                                 <input matInput id="companyContact" placeholder="Контактное лицо" formControlName="personToContact" type="text">
                               </mat-form-field>
                             </div>
-                            <button mat-icon-button>
-                              <mat-icon aria-label="Example icon-button with a heart icon">add_circle_outline</mat-icon>
-                            </button>
                           </div>
-
+                        </mat-card-content>
+                      </mat-card>
                           <p>Что бы вы хотели добавить?</p>
                           <div matTooltip='Напишите чем занимается ваша организация, почему решили организовать акцию и т.д.' class="formwide-tooltip">
                             <div>
@@ -308,8 +310,6 @@
                               </p>
                             </div>
                           </div>
-                        </mat-card-content>
-                      </mat-card>
                     </div>
                   </div>
                     <div class="go-flex">
@@ -321,12 +321,6 @@
 
                 </mat-tab>
               </mat-tab-group>
-            <!--<div class="go-flex">-->
-              <!--<button mat-button matStepperPrevious>Назад</button>-->
-              <!--<button mat-button matStepperNext type = "submit"  [disabled]="!secondFormGroup.valid && !companyFormGroup.valid"-->
-                    <!--class="next-action">Далее</button>-->
-            <!--</div>-->
-
         </mat-step>
 
 
