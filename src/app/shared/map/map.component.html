@@ -1,17 +1,17 @@
     <div matTooltip='Начните вводить название и выберите подходящее из предложенного списка, а мы покажем этот населённый пункт на карте, чтобы вы быстрее смогли найти нужное место' class="formwide-tooltip
                       small-placeholder">
       <mat-form-field>
-        <input id="actionPlace" matInput placeholder="Ближайший населенный пункт" autocorrect="off" autocapitalize="off"
+        <input id="actionPlace" matInput placeholder="Название или адрес места проведения" autocorrect="off" autocapitalize="off"
                spellcheck="off" type="text" class="form-control" #search [formControl]="searchControl" [(ngModel)]="place">
       </mat-form-field>
     </div>
 
   <div *ngIf="place && place.length > 2">
-    <p>Укажите конкретное место проведения на карте</p>
+    <p>Укажите конкретную точку на карте с помощью геомаркера</p>
     <div class = "go-flex-no-space">
       <button mat-button color="basic" class = "map-view-btn" (click)="switchMapView('roadMap')" [class.selected-btn]="mapView === 'roadMap'">Карта</button>
-      <button mat-button color="basic" class = "map-view-btn" (click)="switchMapView('satellite')" [class.selected-btn]="mapView === 'satellite'">Спутник</button>
-      <button mat-button color="basic" class = "map-view-btn" (click)="switchMapView('hybrid')" [class.selected-btn]="mapView === 'hybrid'">Гибридный вид</button>
+      <!--<button mat-button color="basic" class = "map-view-btn" (click)="switchMapView('satellite')" [class.selected-btn]="mapView === 'satellite'">Спутник</button>-->
+      <button mat-button color="basic" class = "map-view-btn" (click)="switchMapView('hybrid')" [class.selected-btn]="mapView === 'hybrid'">Спутник</button>
     </div>
 
     <agm-map *ngIf = "mapView === 'roadMap'" [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom" [mapTypeId]="'roadmap'" >

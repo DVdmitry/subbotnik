@@ -20,10 +20,6 @@ import { NavComponent} from './nav/nav.component';
 import { StepOneRegisterActionComponent } from './actions/new-action-one/step-one-register-action.component';
 import { MakeActionComponent } from './actions/make-action/make-action.component';
 import { MapComponent } from './shared/map/map.component';
-import { RegisterTabComponent } from './actions/new-action-one/register-tab/register-tab.component';
-import { CitizenComponent } from './actions/new-action-one/register-tab/citizen/citizen.component';
-import { CompanyComponent } from './actions/new-action-one/register-tab/company/company.component';
-
 
 @NgModule({
   declarations: [
@@ -32,9 +28,6 @@ import { CompanyComponent } from './actions/new-action-one/register-tab/company/
     StepOneRegisterActionComponent,
     MakeActionComponent,
     MapComponent,
-    RegisterTabComponent,
-    CitizenComponent,
-    CompanyComponent,
   ],
   imports: [
     BrowserModule,
@@ -79,7 +72,7 @@ import { CompanyComponent } from './actions/new-action-one/register-tab/company/
     ])
   ],
   providers: [AppService,
-    {provide: MAT_DATE_LOCALE, useValue: 'ru-RU'},
+    {provide: MAT_DATE_LOCALE, useValue: 'ru-EN'},
     ],
   bootstrap: [AppComponent]
 })

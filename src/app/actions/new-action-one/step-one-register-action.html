@@ -1,4 +1,4 @@
-<!--<button mat-raised-button (click)="isLinear = true" id="toggle-linear">Enable linear mode</button>-->
+<button mat-raised-button (click)="isLinear = true" id="toggle-linear">stepper без валидации</button>
 <mat-card>
   <mat-card-content>
     <p class="mat-body-1">Чтобы создать страницу акции на subbotnik.by,
@@ -10,10 +10,9 @@
 </mat-card>
 <mat-card>
   <mat-card-content>
-    <div *ngIf="userAction">
       <mat-horizontal-stepper [linear]="isLinear">
-        <mat-step [stepControl]="firstFormGroup">
-          <form [formGroup]="firstFormGroup" (ngSubmit)="addPost(firstFormGroup.value)">
+        <mat-step [stepControl]="basicInfoFormGroup">
+          <form [formGroup]="basicInfoFormGroup" (ngSubmit)="addPost(basicInfoFormGroup.value)">
             <ng-template matStepLabel>Основная информация</ng-template>
             <p>Как называется ваша акция?*</p>
             <div matTooltip='Например: Субботник в Осмоловке или Уборка левого берега р. Ислочь'
@@ -25,7 +24,7 @@
 
             <p class="mat-body-1">Где будет проводиться акция?*</p>
             <app-map></app-map>
-
+            <br>
             <div [class.disabled]="showInterval">
               <label for="actionDate">Когда будет проводится акция?*</label>
               <div matTooltip='Укажите дату*, время начала* и окончания акции (если уже знаете их)'
@@ -33,18 +32,19 @@
                 <mat-form-field class="go-flex pos-relative" >
 
                   <input matInput class='formwide-tooltip' id="actionDate" type="text" formControlName="exactDate"
-                         [matDatepicker]="picker" placeholder="Дата проведения акции" [min] = "minDate" [max] = "maxDate">
+                         [matDatepicker]="picker" placeholder="Дата проведения акции" [min] = "minDate"
+                         [max] = "maxDate">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
 
 
                 <div class="time-form go-flex" name="time-form">
-                  <p>c</p>
+                  <p class = "padd-up-right">c</p>
                   <mat-form-field class="time-field" >
                     <input matInput type="time" formControlName="startTime">
                   </mat-form-field>
-                  <p>до</p>
+                  <p class = "padd-up-right">до</p>
                   <mat-form-field class="time-field">
                     <input matInput type="time" formControlName="finishTime">
                   </mat-form-field>
@@ -66,7 +66,7 @@
                   <mat-form-field class='pos-relative'>
                     <input matInput id="actionStartInterval" [matDatepicker]="pickerStartInterval" type="text"
                            formControlName="eventStartInterval" placeholder="c" [min] = "minDate" [max] = "maxDate"
-                           (dateChange)="minInterval(firstFormGroup.value)">
+                           (dateChange)="minInterval(basicInfoFormGroup.value)">
                     <mat-datepicker-toggle matSuffix [for]="pickerStartInterval"></mat-datepicker-toggle>
                     <mat-datepicker #pickerStartInterval></mat-datepicker>
                   </mat-form-field>
@@ -81,7 +81,7 @@
             </div>
 
             <div class="block-text-right">
-              <button mat-button matStepperNext type="submit" [disabled]="!firstFormGroup.valid" class="next-action">
+              <button mat-button matStepperNext type="submit" [disabled]="!basicInfoFormGroup.valid" class="next-action">
                 Далее
               </button>
             </div>
@@ -89,27 +89,255 @@
         </mat-step>
 
 
-        <mat-step [stepControl]="secondFormGroup">
-          <form [formGroup]="secondFormGroup">
+        <mat-step [stepControl]="citizenFormGroup && companyFormGroup">
+
             <ng-template matStepLabel>Информация об организаторах</ng-template>
-            <app-register-tab></app-register-tab>
-            <div class="go-flex">
-              <button mat-button matStepperPrevious>Назад</button>
-              <button mat-button matStepperNext>Далее</button>
-            </div>
-          </form>
+            <!--<app-register-tab></app-register-tab>-->
+<!--Tab Citize-Company-->
+              <mat-tab-group class="demo-tab-group">
+                <mat-tab label="Физическое лицо">
+<!--Citizen Form-->
+                   <!--<app-citizen></app-citizen>-->
+                  <form [formGroup]="citizenFormGroup" (ngSubmit)="addFormDataCitizen(citizenFormGroup.value)">
+                  <div class="demo-tab-content">
+                    <div class="go-flex-no-space">
+                      <div>
+                        <label for="citizenName">Как вас зовут?</label>
+                        <div matTooltip='Волонтёрам важно знать, с кем они будут контактировать'
+                             class="formwide-tooltip small-placeholder">
+                          <mat-form-field>
+                            <input matInput id="citizenName" placeholder="Имя и фамилия" formControlName = "citizenName" required>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div>
+                        <label for="citizenPhoto" class = "upload-photo">Ваше фото</label>
+                        <div matTooltip='Загрузите свое фото, чтобы при встрече волонтерам было проще вас узнать'
+                             class="formwide-tooltip upload-photo">
+                          <input type="file" id="citizenPhoto" placeholder="Фото не выбрано">
+                        </div>
+                      </div>
+                    </div>
+
+                    <mat-card class="example-card">
+                      <mat-card-header>
+                        <div matTooltip='Оставьте свои контактные данные, чтобы волонтеры могли связаться с вами. Например, +375-291234567'
+                             class="formwide-tooltip">
+                          <label for="citizenPhone">Как с вами связаться?</label>
+                        </div>
+                      </mat-card-header>
+                      <mat-card-content>
+                        <div class="go-flex-no-space">
+                          <div matTooltip='Если с вами можно связаться по нескольким номерам, для надёжности лучше указать все.
+                         При этом первый номер будет считаться основным, а последующие – дополнительными. Формат номера: +375-291234567'
+                               class="formwide-tooltip">
+                            <mat-form-field>
+                              <span matPrefix>+375 - &nbsp;</span>
+                              <input matInput id="citizenPhone" placeholder="Контактный номер" type="tel" formControlName="telNumberPrime" required>
+                            </mat-form-field>
+                          </div>
+                          <button mat-icon-button [class.disabled]="tels.length>1">
+                            <mat-icon aria-label="Example icon-button with a heart icon" (click)="addTelField(citizenFormGroup.value)"
+                                      [class.disabled]="tels.length>1">add_circle_outline</mat-icon>
+                          </button>
+                        </div>
+
+                        <div *ngIf = "tels[0] && tels[0].length > 1">
+                          <div *ngFor = "let tel of tels" class="go-flex-no-space">
+                            <mat-form-field>
+                              <input matInput id="tel{{tels.length}}" placeholder="Контактный номер" type="tel" formControlName="telNumberAdd{{tels.length}}">
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="go-flex-no-space">
+                          <div matTooltip='Сюда будут приходить уведомления и напоминания по акции' class="formwide-tooltip">
+                            <mat-form-field>
+                              <input matInput id="citizenPost" placeholder="Электронная почта" type="email" formControlName="usersEmail" required>
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+
+                        <div class="go-flex-no-space">
+                          <div matTooltip='Это может быть ваш личный сайт или блог, профиль ВКонтакте, Facebook или LinkedIn,
+                         где о вас можно найти больше информации и, при необходимости, связаться'
+                               class="formwide-tooltip">
+                            <mat-form-field>
+                              <input matInput id="citizenWeb" placeholder="Сайт или соц.сеть" type="text" formControlName="sitePrime">
+                            </mat-form-field>
+                          </div>
+                          <button mat-icon-button [class.disabled]="sites.length>3">
+                            <mat-icon aria-label="Example icon-button with a heart icon" [class.disabled]="sites.length>3" (click)="addSiteField(citizenFormGroup.value)">add_circle_outline</mat-icon>
+                          </button>
+                        </div>
+
+                    <div *ngIf = "sites[0] && sites[0].length > 5">
+                      <div *ngFor = "let site of sites" class="go-flex-no-space">
+                        <mat-form-field>
+                          <input matInput id="site{{sites.length}}" placeholder="Сайт или соц.сеть" type="text" formControlName="siteAdd{{sites.length}}">
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                      </mat-card-content>
+                    </mat-card>
+                    <p>Что бы вы хотели добавить?</p>
+                    <div matTooltip='Напишите чем занимаетесь, почему решили организовать акцию и т.д.' class="formwide-tooltip">
+                      <div>
+                        <p>
+                          <mat-form-field class="example-full-width">
+                            <textarea  matInput rows = 3 formControlName="aboutEvent" placeholder="Напишите чем занимаетесь, почему решили организовать акцию и т.д."></textarea>
+                          </mat-form-field>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                    <div class="go-flex">
+                      <button mat-button matStepperPrevious>Назад</button>
+                      <button mat-button matStepperNext type = "submit"  [disabled]="!citizenFormGroup.valid"
+                              class="next-action">Далее</button>
+                    </div>
+                  </form>
+                </mat-tab>
+
+ <!--Company-->
+                <mat-tab label="Организация">
+                  <form [formGroup]="companyFormGroup" (ngSubmit)="addFormDataCompany(companyFormGroup.value)">
+                  <div class="demo-tab-content">
+                    <!--<app-company></app-company>-->
+                    <div class="demo-tab-content">
+                      <div class="go-flex-no-space">
+                        <div>
+                          <label for="companyName">Как называется ваша организация?</label>
+                          <div matTooltip='Чтобы к вашей акции было больше доверия, лучше указать название организации'
+                               class="formwide-tooltip small-placeholder">
+                            <mat-form-field>
+                              <input matInput id="companyName" placeholder="Название организации" formControlName = "companyName" required>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div>
+                          <label for="companyPhoto" class = "upload-photo">Ваш логотип</label>
+                          <div matTooltip='Если у вас есть логотип, обязательно добавте его на страницу акции, чтобы вас
+                                            было проще и быстрее узнать'
+                               class="formwide-tooltip upload-photo">
+                            <input type="file" id="companyPhoto" placeholder="Фото не выбрано">
+                          </div>
+                        </div>
+                      </div>
+
+                      <mat-card class="example-card">
+                        <mat-card-header>
+                          <div matTooltip='Оставьте свои контактные данные, чтобы волонтеры могли с вами связаться'
+                               class="formwide-tooltip">
+                            <mat-card-title><label for="companyPhone">Как с вами связаться?</label></mat-card-title>
+                          </div>
+                        </mat-card-header>
+                        <mat-card-content>
+                          <div class="go-flex-no-space">
+                            <div matTooltip='Если с вами можно связаться по нескольким номерам, для надежности лучше указать все.
+                           При этом первый номер будет считаться основным, а последующие - дополнительными'
+                                 class="formwide-tooltip">
+                              <mat-form-field>
+                                <span matPrefix>+375 - &nbsp;</span>
+                                <input matInput id="companyPhone" placeholder="Контактный номер" formControlName="telNumberPrime" type="tel" required>
+                              </mat-form-field>
+                            </div>
+
+                            <button mat-icon-button [class.disabled]="tels.length>1">
+                              <mat-icon aria-label="Example icon-button with a heart icon" (click)="addTelField(companyFormGroup.value)"
+                                        [class.disabled]="tels.length>1">add_circle_outline</mat-icon>
+                            </button>
+                          </div>
+
+                          <div *ngIf = "tels[0] && tels[0].length > 1">
+                            <div *ngFor = "let tel of tels" class="go-flex-no-space">
+                              <mat-form-field>
+                                <input matInput id="companyTel{{tels.length}}" placeholder="Контактный номер" type="tel" formControlName="telNumberAdd{{tels.length}}">
+                              </mat-form-field>
+                            </div>
+                          </div>
+
+                          <div class="go-flex-no-space">
+                            <div matTooltip='Сюда будут приходить уведомления и напоминания по акции' class="formwide-tooltip">
+                              <mat-form-field>
+                                <input matInput id="companyPost" placeholder="Электронная почта" formControlName="usersEmail" type="email" required>
+                              </mat-form-field>
+                            </div>
+                            <button mat-icon-button>
+                              <mat-icon aria-label="Example icon-button with a heart icon">add_circle_outline</mat-icon>
+                            </button>
+                          </div>
+
+                          <div class="go-flex-no-space">
+                            <div matTooltip='Это может быть ваш сайт или блог вашей компании, а также ее страницы в LinkedIn,
+                                            ВКонтакте или Facebook, где о вашей акции можно найти больше информации и, при необходимости, связаться'
+                                 class="formwide-tooltip">
+                              <mat-form-field>
+                                <input matInput id="companyWeb" placeholder="Сайт или соц.сеть" type="text" formControlName="sitePrime">
+                              </mat-form-field>
+                            </div>
+                            <button mat-icon-button [class.disabled]="sites.length>3">
+                              <mat-icon aria-label="Example icon-button with a heart icon" [class.disabled]="sites.length>3"
+                                        (click)="addSiteField(companyFormGroup.value)">add_circle_outline</mat-icon>
+                            </button>
+                          </div>
+
+
+                          <div class="go-flex-no-space">
+                            <div matTooltip='Укажите имя и фамилию того, с кем будут связываться волонтёры. Чтобы к вашей акции было больше доверия
+                                             лучшеуказывать свои настоящие имя и фамилию'
+                                 class="formwide-tooltip">
+                              <mat-form-field>
+                                <input matInput id="companyContact" placeholder="Контактное лицо" formControlName="personToContact" type="text">
+                              </mat-form-field>
+                            </div>
+                            <button mat-icon-button>
+                              <mat-icon aria-label="Example icon-button with a heart icon">add_circle_outline</mat-icon>
+                            </button>
+                          </div>
+
+                          <p>Что бы вы хотели добавить?</p>
+                          <div matTooltip='Напишите чем занимается ваша организация, почему решили организовать акцию и т.д.' class="formwide-tooltip">
+                            <div>
+                              <p>
+                                <mat-form-field class="example-full-width">
+                                  <textarea matInput rows = 3 placeholder="Напишите чем занимается ваша организация, почему решили организовать акцию и т.д."></textarea>
+                                </mat-form-field>
+                              </p>
+                            </div>
+                          </div>
+                        </mat-card-content>
+                      </mat-card>
+                    </div>
+                  </div>
+                    <div class="go-flex">
+                      <button mat-button matStepperPrevious>Назад</button>
+                      <button mat-button matStepperNext type = "submit"  [disabled]="!companyFormGroup.valid"
+                              class="next-action">Далее</button>
+                    </div>
+                  </form>
+
+                </mat-tab>
+              </mat-tab-group>
+            <!--<div class="go-flex">-->
+              <!--<button mat-button matStepperPrevious>Назад</button>-->
+              <!--<button mat-button matStepperNext type = "submit"  [disabled]="!secondFormGroup.valid && !companyFormGroup.valid"-->
+                    <!--class="next-action">Далее</button>-->
+            <!--</div>-->
+
         </mat-step>
 
 
         <mat-step [stepControl]="thirdFormGroup">
           <form [formGroup]="thirdFormGroup">
             <ng-template matStepLabel>Подробности акции</ng-template>
-
             <p class="subheading-1">Пожалуйста, загрузите мотивирующее фото</p>
             <div class="box-upload-picture block-text-center">
               <br>
               <label class="blue" for="citizenPhoto">Загрузить изображение</label>
-              <input class="invisible" type="file" id="citizenPhoto" placeholder="Фото не выбрано">
+              <input class="invisible" type="file" id="motivatedPicture" placeholder="Фото не выбрано">
               <br>
               <p class="mat-body-1">Нажмите или перетащите изображение сюда*</p>
             </div>
@@ -153,7 +381,6 @@
           </form>
         </mat-step>
       </mat-horizontal-stepper>
-    </div>
   </mat-card-content>
 </mat-card>
 

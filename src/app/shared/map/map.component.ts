@@ -81,8 +81,6 @@ export class MapComponent implements OnInit {
   setLocation(place) {
     this.latitude = place.geometry.location.lat();
     this.longitude = place.geometry.location.lng();
-    console.log(this.latitude);
-    console.log(this.longitude);
   }
 
   switchMapView(value): void {

@@ -16,10 +16,10 @@ export class AppService {
       .toPromise()
       .then(response => response.json() as NavLinks[]);
 }
-  getAction(): Promise<Action> {
-    return this.http.get(this.actionUrl)
-      .toPromise()
-      .then(response => response.json() as Action);
-  }
+  // getAction(): Promise<Action> {
+  //   return this.http.get(this.actionUrl)
+  //     .toPromise()
+  //     .then(response => response.json() as Action);
+  // }
 
 }
