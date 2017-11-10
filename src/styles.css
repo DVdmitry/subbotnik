@@ -112,3 +112,37 @@ a {
 .padding {
   padding: 1% 3% 0 3%;
 }
+
+.go-block {
+  display: block;
+}
+
+.example-margin {
+  margin: 10px;
+}
+
+.mat-slider-horizontal {
+  width: 200px;
+}
+
+div .mat-slider-horizontal {
+  height: 50px;
+}
+
+.example-section {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  height: 60px;
+}
+
+.mat-slider-min-value.mat-slider-thumb-label-showing .mat-slider-thumb {
+  background-color: #80878C;
+  -webkit-transform: scale(0.6);
+  -moz-transform: scale(0.6);
+  -ms-transform: scale(0.6);
+  -o-transform: scale(0.6);
+  transform: scale(0.6);
+}
+
+

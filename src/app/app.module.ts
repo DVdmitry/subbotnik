@@ -6,7 +6,8 @@ import { MatButtonModule, MatCardModule, MatMenuModule,
   MatToolbarModule, MatIconModule, MatFormFieldModule,
   MatInputModule, MatDatepickerModule, MAT_DATE_LOCALE,
   MatNativeDateModule, MatTooltipModule, MatStepperModule,
-  MatSelectModule, MatExpansionModule, MatTabsModule, MatCheckboxModule} from '@angular/material';
+  MatSelectModule, MatExpansionModule, MatTabsModule,
+  MatCheckboxModule, MatSliderModule } from '@angular/material';
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService } from './in-memory-data.service';
 import { AppService } from './app-service';
@@ -48,6 +49,7 @@ import { MapComponent } from './shared/map/map.component';
     MatTabsModule,
     MatExpansionModule,
     MatCheckboxModule,
+    MatSliderModule,
     HttpModule,
     ReactiveFormsModule,
     InMemoryWebApiModule.forRoot(InMemoryDataService),

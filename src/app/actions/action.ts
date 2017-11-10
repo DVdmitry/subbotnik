@@ -1,15 +1,18 @@
 export class Action {
   constructor (
-    // public name: string, public place: string, public date: Date,
-    //            public startInterval: Date, public endInterval: Date, public time: string
     public eventName: string,
+    public addressOfEvent: string,
+    public addressLatitude: string,
+    public addressLongitude: string,
     public exactDate: string,
     public startTime: string,
     public finishTime: string,
     public eventStartInterval: any,
     public eventFinishInterval: any,
     public citizenName: string,
+    public citizenPhoto: any,
     public companyName: string,
+    public companyLogo: string,
     public telNumberPrime: number,
     public telNumberAdd1: number,
     public telNumberAdd2: number,
@@ -20,6 +23,16 @@ export class Action {
     public siteAdd3: string,
     public siteAdd4: string,
     public aboutEvent: string,
-    public personToContact: string
+    public personToContact: string,
+    public placePicture: any,
+    public meetingPlace: string,
+    public meetingPlaceLatitude: string,
+    public meetingPlaceLongitude: string,
+    public getToPlace: string,
+    public whatToDo: string,
+    public equipment: string,
+    public  minPeople: number,
+    public maxPeople: number,
+    public smthElse: string,
   ) {}
 }

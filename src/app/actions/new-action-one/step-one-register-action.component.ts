@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-// import { Action} from '../action';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Action} from '../action';
+import { AppService } from '../../app-service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'step-one-register-action',
@@ -11,39 +12,28 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 export class StepOneRegisterActionComponent implements OnInit {
   isLinear = false;
   basicInfoFormGroup: FormGroup;
-  eventName = '';
-  exactDate = '';
-  startTime = '';
-  finishTime = '';
-  eventStartInterval: any;
-  eventFinishInterval = '';
+  userAction: Action;
+  addressOfEventValidation: number;
+  addressOfMeetingValidation: number;
   showInterval = false;
   minDate = new Date();
   maxDate = new Date(+this.minDate + 31536000000);
   citizenFormGroup: FormGroup;
-  citizenName: string;
+  companyFormGroup: FormGroup;
+  eventDetailFormGroup: FormGroup;
   tels: any = [];
   sites: any = [];
-  companyFormGroup: FormGroup;
-  companyName: string;
-  telNumberPrime: number;
-  telNumberAdd1: string;
-  telNumberAdd2: string;
-  usersEmail: string;
-  sitePrime: string;
-  siteAdd1: string;
-  siteAdd2: string;
-  siteAdd3: string;
-  siteAdd4: string;
-  aboutEvent: string;
-  personToContact: string;
-  thirdFormGroup: FormGroup;
+  max = 100;
+  min = 0;
+  step = 1;
+  value = 0;
+  thumbLabel = true;
 
-  constructor(private _formBuilder: FormBuilder) {
+  constructor(private service: AppService, private _formBuilder: FormBuilder) {
   }
 
   ngOnInit(): void {
-    // this.service.getAction().then(response => this.userAction = response);
+    this.service.getAction().then(response => this.userAction = response);
     this.basicInfoFormGroup = this._formBuilder.group({
       eventName: ['', Validators.compose([Validators.required,
         Validators.minLength(2)])],
@@ -55,6 +45,7 @@ export class StepOneRegisterActionComponent implements OnInit {
     this.citizenFormGroup = this._formBuilder.group({
       citizenName: ['', Validators.compose([Validators.required, Validators.minLength(5),
         Validators.maxLength(40)])],
+      citizenPhoto: [''],
       telNumberPrime: ['', Validators.compose([Validators.required, Validators.minLength(5)])],
       telNumberAdd1: ['', Validators.min(5)],
       telNumberAdd2: ['', Validators.min(5)],
@@ -70,6 +61,7 @@ export class StepOneRegisterActionComponent implements OnInit {
     this.companyFormGroup = this._formBuilder.group({
       companyName: ['', Validators.compose([Validators.required, Validators.minLength(5),
         Validators.maxLength(40)])],
+      companyLogo: [''],
       telNumberPrime: ['', Validators.compose([Validators.required, Validators.minLength(5)])],
       telNumberAdd1: ['', Validators.min(5)],
       telNumberAdd2: ['', Validators.min(5)],
@@ -83,48 +75,54 @@ export class StepOneRegisterActionComponent implements OnInit {
       personToContact: ['', Validators.minLength(4)],
       aboutEvent: ['', Validators.maxLength(700)],
     });
-    this.thirdFormGroup = this._formBuilder.group({
-      thirdCtrl: ['', Validators.required]
+    this.eventDetailFormGroup = this._formBuilder.group({
+      // placePicture: [''],
+      getToPlace: [''],
+      whatToDo: [''],
+      equipment: [''],
+      smthElse: ['']
     });
   }
 
   addPost(post): void {
-    this.eventName = post.eventName;
-    this.exactDate = post.exactDate;
-    this.startTime = post.startTime;
-    this.finishTime = post.finishTime;
-    this.eventStartInterval = post.eventStartInterval;
-    this.eventFinishInterval = post.eventFinishInterval;
+    this.userAction.eventName = post.eventName;
+    this.userAction.citizenPhoto = post.citizenPhoto;
+    this.userAction.exactDate = post.exactDate;
+    this.userAction.startTime = post.startTime;
+    this.userAction.finishTime = post.finishTime;
+    this.userAction.eventStartInterval = post.eventStartInterval;
+    this.userAction.eventFinishInterval = post.eventFinishInterval;
     console.log(post);
   }
   addFormDataCompany(post): void {
-    this.companyName = post.companyName;
-    this.telNumberPrime = post.telNumberPrime;
-    this.telNumberAdd1 = post.telNumberAdd1;
-    this.telNumberAdd2 = post.telNumberAdd2;
-    this.usersEmail = post.usersEmail;
-    this.sitePrime = post.sitePrime;
-    this.siteAdd1 = post.siteAdd1;
-    this.siteAdd2 = post.siteAdd2;
-    this.siteAdd3 = post.siteAdd3;
-    this.siteAdd4 = post.siteAdd4;
-    this.aboutEvent = post.aboutEvent;
-    this.personToContact = post.personToContact;
+    this.userAction.companyName = post.companyName;
+    this.userAction.companyLogo = post.companyLogo;
+    this.userAction.telNumberPrime = post.telNumberPrime;
+    this.userAction.telNumberAdd1 = post.telNumberAdd1;
+    this.userAction.telNumberAdd2 = post.telNumberAdd2;
+    this.userAction.usersEmail = post.usersEmail;
+    this.userAction.sitePrime = post.sitePrime;
+    this.userAction.siteAdd1 = post.siteAdd1;
+    this.userAction.siteAdd2 = post.siteAdd2;
+    this.userAction.siteAdd3 = post.siteAdd3;
+    this.userAction.siteAdd4 = post.siteAdd4;
+    this.userAction.aboutEvent = post.aboutEvent;
+    this.userAction.personToContact = post.personToContact;
     console.log(post);
   }
 
   addFormDataCitizen(post): void {
-    this.citizenName = post.citizenName;
-    this.telNumberPrime = post.telNumberPrime;
-    this.telNumberAdd1 = post.telNumberAdd1;
-    this.telNumberAdd2 = post.telNumberAdd2;
-    this.usersEmail = post.usersEmail;
-    this.sitePrime = post.sitePrime;
-    this.siteAdd1 = post.siteAdd1;
-    this.siteAdd2 = post.siteAdd2;
-    this.siteAdd3 = post.siteAdd3;
-    this.siteAdd4 = post.siteAdd4;
-    this.aboutEvent = post.aboutEvent;
+    this.userAction.citizenName = post.citizenName;
+    this.userAction.telNumberPrime = post.telNumberPrime;
+    this.userAction.telNumberAdd1 = post.telNumberAdd1;
+    this.userAction.telNumberAdd2 = post.telNumberAdd2;
+    this.userAction.usersEmail = post.usersEmail;
+    this.userAction.sitePrime = post.sitePrime;
+    this.userAction.siteAdd1 = post.siteAdd1;
+    this.userAction.siteAdd2 = post.siteAdd2;
+    this.userAction.siteAdd3 = post.siteAdd3;
+    this.userAction.siteAdd4 = post.siteAdd4;
+    this.userAction.aboutEvent = post.aboutEvent;
     console.log(post);
   }
 
@@ -151,7 +149,7 @@ export class StepOneRegisterActionComponent implements OnInit {
   }
 
   minInterval(date): void {
-    this.eventStartInterval = new Date(+date.eventStartInterval + 86400000);
+    this.userAction.eventStartInterval = new Date(+date.eventStartInterval + 86400000);
   }
 
   addTelField(data): void {
@@ -184,5 +182,34 @@ export class StepOneRegisterActionComponent implements OnInit {
         this.sites.push(data.telSiteAdd2);
       }
     }
+  }
+  getMinPeople(data): void {
+    this.userAction.minPeople = data.value;
+  }
+  getMaxPeople(data): void {
+    this.userAction.maxPeople = data.value;
+  }
+  addFormDataDetails(post): void {
+    this.userAction.placePicture = post.placePicture;
+    this.userAction.getToPlace = post.getToPlace;
+    this.userAction.whatToDo = post.whatToDo;
+    this.userAction.equipment = post.equipment;
+    this.userAction.smthElse = post.smthElse;
+    console.log(post);
+  }
+
+  getEventAddress(data): void {
+    this.userAction.addressOfEvent = data.target.value;
+    if (this.userAction.addressOfEvent) {
+      this.addressOfEventValidation = 1;
+    }
+    console.log(data);
+  }
+  getMeetingAddress(data): void {
+    this.userAction.meetingPlace = data.target.value;
+    if (this.userAction.meetingPlace) {
+      this.addressOfMeetingValidation = 1;
+    }
+    console.log(data);
   }
 }
