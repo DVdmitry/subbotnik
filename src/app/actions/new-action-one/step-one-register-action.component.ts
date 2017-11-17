@@ -1,7 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import { Action} from '../action';
-import { AppService } from '../../app-service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {Action} from '../action';
+import {AppService} from '../../app-service';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ElementRef, NgZone, ViewChild} from '@angular/core';
+
+import {MapsAPILoader} from '@agm/core';
 
 @Component({
   selector: 'step-one-register-action',
@@ -11,10 +14,16 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export class StepOneRegisterActionComponent implements OnInit {
   isLinear = false;
+  correct = false;
   basicInfoFormGroup: FormGroup;
   userAction: Action;
-  addressOfEventValidation: number;
-  addressOfMeetingValidation: number;
+  meetingLatitude = false;
+  eventLatitude = false;
+  placePict: string;
+  eventCoordinates: any[] = [];
+  meetingCoordinates: any[] = [];
+  addressTest: string[] = [];
+  getToPlace: string;
   showInterval = false;
   minDate = new Date();
   maxDate = new Date(+this.minDate + 31536000000);
@@ -28,8 +37,12 @@ export class StepOneRegisterActionComponent implements OnInit {
   step = 1;
   value = 0;
   thumbLabel = true;
+  preview = false;
+  @ViewChild('search')
+  public searchElementRef: ElementRef;
 
-  constructor(private service: AppService, private _formBuilder: FormBuilder) {
+  constructor(private service: AppService, private _formBuilder: FormBuilder, private mapsAPILoader: MapsAPILoader,
+              private ngZone: NgZone) {
   }
 
   ngOnInit(): void {
@@ -76,15 +89,16 @@ export class StepOneRegisterActionComponent implements OnInit {
       aboutEvent: ['', Validators.maxLength(700)],
     });
     this.eventDetailFormGroup = this._formBuilder.group({
-      // placePicture: [''],
       getToPlace: [''],
       whatToDo: [''],
       equipment: [''],
-      smthElse: ['']
+      smthElse: [''],
+      placePicture: ['']
     });
+
   }
 
-  addPost(post): void {
+  addBasicInfo(post): void {
     this.userAction.eventName = post.eventName;
     this.userAction.citizenPhoto = post.citizenPhoto;
     this.userAction.exactDate = post.exactDate;
@@ -92,8 +106,8 @@ export class StepOneRegisterActionComponent implements OnInit {
     this.userAction.finishTime = post.finishTime;
     this.userAction.eventStartInterval = post.eventStartInterval;
     this.userAction.eventFinishInterval = post.eventFinishInterval;
-    console.log(post);
   }
+
   addFormDataCompany(post): void {
     this.userAction.companyName = post.companyName;
     this.userAction.companyLogo = post.companyLogo;
@@ -108,7 +122,6 @@ export class StepOneRegisterActionComponent implements OnInit {
     this.userAction.siteAdd4 = post.siteAdd4;
     this.userAction.aboutEvent = post.aboutEvent;
     this.userAction.personToContact = post.personToContact;
-    console.log(post);
   }
 
   addFormDataCitizen(post): void {
@@ -123,7 +136,6 @@ export class StepOneRegisterActionComponent implements OnInit {
     this.userAction.siteAdd3 = post.siteAdd3;
     this.userAction.siteAdd4 = post.siteAdd4;
     this.userAction.aboutEvent = post.aboutEvent;
-    console.log(post);
   }
 
   customInterval(): void {
@@ -183,11 +195,14 @@ export class StepOneRegisterActionComponent implements OnInit {
       }
     }
   }
+
   getMinPeople(data): void {
     this.userAction.minPeople = data.value;
+    this.value = data.value + 1;
+    this.userAction.maxPeople = data.value + 1;
   }
   getMaxPeople(data): void {
-    this.userAction.maxPeople = data.value;
+      this.userAction.maxPeople = data.value;
   }
   addFormDataDetails(post): void {
     this.userAction.placePicture = post.placePicture;
@@ -195,21 +210,37 @@ export class StepOneRegisterActionComponent implements OnInit {
     this.userAction.whatToDo = post.whatToDo;
     this.userAction.equipment = post.equipment;
     this.userAction.smthElse = post.smthElse;
-    console.log(post);
+    this.getToPlace = post.getToPlace;
+    this.preview = true;
   }
-
-  getEventAddress(data): void {
-    this.userAction.addressOfEvent = data.target.value;
-    if (this.userAction.addressOfEvent) {
-      this.addressOfEventValidation = 1;
+  getEventLat(coordinates: any[]) {
+    if (this.userAction !== undefined && coordinates !== undefined ) {
+      this.eventCoordinates = coordinates;
+      this.addressTest.length = 0;
+      this.userAction.addressLatitude = coordinates[0];
+      this.eventLatitude = true;
+      this.userAction.addressLongitude = coordinates[1];
+      coordinates[2].address_components.forEach(address =>
+        this.addressTest.push(address.long_name)
+      );
+      this.userAction.addressOfEvent = this.addressTest.join();
     }
-    console.log(data);
   }
-  getMeetingAddress(data): void {
-    this.userAction.meetingPlace = data.target.value;
-    if (this.userAction.meetingPlace) {
-      this.addressOfMeetingValidation = 1;
+  getMeetingLat(coordinates: any[]) {
+    if (this.userAction !== undefined && coordinates !== undefined && coordinates[2].length !== 0) {
+      this.meetingCoordinates = coordinates;
+      this.addressTest.length = 0;
+      this.userAction.meetingPlaceLatitude = coordinates[0];
+      this.meetingLatitude = true;
+      this.userAction.meetingPlaceLongitude = coordinates[1];
+      coordinates[2].address_components.forEach(address =>
+        this.addressTest.push(address.long_name)
+      );
+      this.userAction.meetingPlace = this.addressTest.join();
     }
-    console.log(data);
+  }
+  correction(): void {
+    this.preview = false;
+    this.correct = true;
   }
 }

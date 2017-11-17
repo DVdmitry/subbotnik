@@ -12,7 +12,7 @@ import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService } from './in-memory-data.service';
 import { AppService } from './app-service';
 import { RouterModule } from '@angular/router';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 
 import { AgmCoreModule } from '@agm/core';
 
@@ -73,8 +73,9 @@ import { MapComponent } from './shared/map/map.component';
       },
     ])
   ],
-  providers: [AppService,
+  providers: [AppService, { provide: LOCALE_ID, useValue: 'ru' },
     {provide: MAT_DATE_LOCALE, useValue: 'ru-EN'},
+    MapComponent
     ],
   bootstrap: [AppComponent]
 })

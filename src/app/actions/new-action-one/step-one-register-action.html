@@ -1,18 +1,10 @@
 <button mat-raised-button (click)="isLinear = true" id="toggle-linear">stepper без валидации</button>
-<mat-card>
-  <mat-card-content>
-    <p class="mat-body-1">Чтобы создать страницу акции на subbotnik.by,
-      нужно указать информацию, которая будет интересна и важна для потенциальных
-      волонтёров: что это за акция, когда и где она пройдёт, кто её организует, что
-      нужно для участия в ней. Предлагаем внести все эти данные в 3 простых шага.
-      Обязательные поля отмечены звёздочкой (*).</p>
-  </mat-card-content>
-</mat-card>
+<div *ngIf = "!preview && !correct">
 <mat-card>
   <mat-card-content>
     <mat-horizontal-stepper [linear]="isLinear">
       <mat-step [stepControl]="basicInfoFormGroup">
-        <form [formGroup]="basicInfoFormGroup" (ngSubmit)="addPost(basicInfoFormGroup.value)">
+        <form [formGroup]="basicInfoFormGroup" (ngSubmit)="addBasicInfo(basicInfoFormGroup.value)">
           <ng-template matStepLabel>Основная информация</ng-template>
           <p>Как называется ваша акция?*</p>
           <div matTooltip='Например: Субботник в Осмоловке или Уборка левого берега р. Ислочь'
@@ -23,9 +15,11 @@
           </div>
 
           <p class="mat-body-1">Где будет проводиться акция?*</p>
-          <app-map (change)="getEventAddress($event)"></app-map>
+
+            <app-map (getEventLat)="getEventLat($event)"></app-map>
+
           <br>
-          <div [class.disabled]="showInterval">
+          <div *ngIf="!showInterval">
             <label for="actionDate">Когда будет проводится акция?*</label>
             <div matTooltip='Укажите дату*, время начала* и окончания акции (если уже знаете их)'
                  class="formwide-tooltip small-placeholder">
@@ -60,8 +54,7 @@
                                 страницу акции. Все подписавшиеся на акцию волнтёры получат об этом
                                 уведомление, так что все будут в курсе.'
                  class="formwide-tooltip">
-              <label for="actionStartInterval">Если вы ещё не знаете точную дату и время проведения акции, укажите хотя
-                бы примерный период,
+              <label for="actionStartInterval">Укажите хотя бы примерный период,
                 в который планируете провести акцию*</label>
               <div class="go-flex">
                 <mat-form-field class='pos-relative'>
@@ -83,7 +76,7 @@
           </div>
 
           <div class="block-text-right">
-            <button mat-button matStepperNext type="submit" [disabled]="!basicInfoFormGroup.valid || addressOfEventValidation !=1" class="next-action">
+            <button mat-button matStepperNext type="submit" [disabled]="!basicInfoFormGroup.valid || !eventLatitude" class="next-action">
               Далее
             </button>
           </div>
@@ -367,9 +360,10 @@
                  class="formwide-tooltip">
 
               <div class="box-upload-picture block-text-center">
-                <p class="blue"></p>
+                 <!--<p class="blue"></p>-->
+                <img *ngIf = "placePict" src="{{placePict}}">
               </div>
-              <input type="file" id="placePicture">
+              <input type="file" formControlName="placePicture" id = "placePicture">
             </div>
             <div matTooltip='Местом сбора может быть остановка транспорта,
                             авто- или ж/д вокзал, местная достопримечательность и т. д.'
@@ -378,10 +372,12 @@
             </div>
           </section>
 
+
           <section>
-            <app-map (change)="getMeetingAddress($event)"></app-map>
+            <app-map (getMeetingLat)="getMeetingLat($event)"></app-map>
           </section>
           <br>
+
 
           <section>
             <label for="getToPlace">Как можно добраться до места сбора?</label>
@@ -432,7 +428,7 @@
           </section>
 
           <section>
-            <p>Минимальное количество участников</p>
+            <p>Минимальное количество участников: <span *ngIf = "userAction && userAction.minPeople !== undefined" class = "circle">{{userAction.minPeople}}</span></p>
             <div class="example-section">
               <mat-slider
                 class="example-margin go-block mat-slider-horizontal blue"
@@ -446,7 +442,7 @@
           </section>
 
           <section>
-            <p>Максимальное количество участников</p>
+            <p>Максимальное количество участников: <span *ngIf = "userAction && userAction.maxPeople !== undefined" class = "circle">{{userAction.maxPeople}}</span></p>
             <div class="example-section">
               <mat-slider
                 class="example-margin go-block mat-slider-horizontal blue"
@@ -475,12 +471,59 @@
 
           <div class="go-flex">
             <button mat-button matStepperPrevious>Назад</button>
-            <button mat-button type="submit" [disabled]="!eventDetailFormGroup.valid || addressOfMeetingValidation !=1">Предпросмотр</button>
+            <button mat-button type="submit" [disabled]="!meetingLatitude">Предпросмотр</button>
           </div>
         </form>
       </mat-step>
     </mat-horizontal-stepper>
   </mat-card-content>
 </mat-card>
+</div>
 
+<div *ngIf = "preview">
+  <p>Название мероприятия: {{userAction.eventName}}</p>
+  <p>Мероприятие будет проходить: {{userAction.addressOfEvent}}</p>
+  <br>
+  <app-map [placeOfEvent]="eventCoordinates"></app-map>
+  <br>
+  <p *ngIf = "userAction.exactDate">Дата проведения: {{userAction.exactDate | date:'fullDate':'RU'}}</p>
+  <p *ngIf = "userAction.startTime">Время начала:{{userAction.startTime}}</p>
+  <p *ngIf = "userAction.finishTime">Время окончания:{{userAction.finishTime}}</p>
+  <p *ngIf = "userAction.eventStartInterval">Дата начала акции: {{userAction.eventStartInterval}}</p>
+  <p *ngIf = "userAction.eventFinishInterval">Дата окончания акции: {{userAction.eventFinishInterval}}</p>
+  <p *ngIf = "userAction.citizenName">Организатор: {{userAction.citizenName}}</p>
+  <p *ngIf = "userAction.citizenPhoto">Фото организатора: {{userAction.citizenPhoto}}</p>
+  <p *ngIf = "userAction.companyName">Компания-организатор{{userAction.companyName}}</p>
+  <p *ngIf = "userAction.companyLogo">Логотип компании{{userAction.companyLogo}}</p>
+  <p *ngIf = "userAction.telNumberPrime">Основной номер телефона:{{userAction.telNumberPrime}}</p>
+  <p *ngIf = "userAction.telNumberAdd1">Дополнительный номер телефона:{{userAction.telNumberAdd1}}</p>
+  <p *ngIf = "userAction.telNumberAdd2">Дополнительный номер телефона:{{userAction.telNumberAdd2}}</p>
+  <p *ngIf = "userAction.usersEmail">Электронная почта:{{userAction.usersEmail}}</p>
+  <p *ngIf = "userAction.sitePrime">Сайт/соц.сеть:{{userAction.sitePrime}}</p>
+  <p *ngIf = "userAction.siteAdd1">Сайт/соц.сеть:{{userAction.siteAdd1}}</p>
+  <p *ngIf = "userAction.siteAdd2">Сайт/соц.сеть:{{userAction.siteAdd2}}</p>
+  <p *ngIf = "userAction.siteAdd3">Сайт/соц.сеть:{{userAction.siteAdd3}}</p>
+  <p *ngIf = "userAction.siteAdd4">Сайт/соц.сеть:{{userAction.siteAdd4}}</p>
+  <p *ngIf = "userAction.aboutEvent">О событии:{{userAction.aboutEvent}}</p>
+  <p *ngIf = "userAction.personToContact">С кем связываться:{{userAction.personToContact}}</p>
+  <p *ngIf = "userAction.placePicture">Фото местности:{{userAction.placePicture}}</p>
+  <p *ngIf = "userAction.meetingPlace">Место встречи: {{userAction.meetingPlace}}</p>
+  <br>
+  <app-map [placeOfMeeting]="meetingCoordinates"></app-map>
+  <br>
+  <p *ngIf = "userAction.getToPlace">Как добраться: {{userAction.getToPlace}}</p>
+  <p *ngIf = "userAction.whatToDo">Что будем делать: {{userAction.whatToDo}}</p>
+  <p *ngIf = "userAction.equipment">Что взять с собой: {{userAction.equipment}}</p>
+  <p *ngIf = "userAction.minPeople">Минимальное количество: {{userAction. minPeople}} чел.</p>
+  <p *ngIf = "userAction.maxPeople">Максимальное количество: {{userAction.maxPeople}} чел.</p>
+  <p *ngIf = "userAction.smthElse">Дополнительная информация:{{userAction.smthElse}}</p>
+  <div class= "go-flex">
+    <button mat-raised-button color="accent" (click)="correction()">< Редактировать</button>
+    <button mat-raised-button color="accent">Опубликовать ></button>
+  </div>
+</div>
 
+<div *ngIf = "correct">
+    <h4 class="mat-h4">Название мероприятия: <input matInput [(ngModel)] = "userAction.eventName"></h4>
+    <h4 class="mat-h4">Место проведения мероприятия: <input matInput [(ngModel)] = "userAction.addressOfEvent"></h4>
+</div>
