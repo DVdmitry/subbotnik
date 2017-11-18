@@ -25,14 +25,14 @@
 
     <agm-map *ngIf="mapView === 'roadMap'" [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false"
              [zoom]="zoom" [mapTypeId]="'roadmap'">
-      <agm-marker [markerDraggable]="true" (dragEnd)="markerMoved($event)" [latitude]="latitude || 39.8282"
-                  [longitude]="longitude || -98.5795"></agm-marker>
+      <agm-marker [markerDraggable]="true" (dragEnd)="markerMoved($event)" [latitude]="latitude"
+                  [longitude]="longitude"></agm-marker>
     </agm-map>
 
     <agm-map *ngIf="mapView === 'hybrid'" [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false"
              [zoom]="zoom" [mapTypeId]="'hybrid'">
-      <agm-marker [markerDraggable]="true" (dragEnd)="markerMoved($event)" [latitude]="latitude || 39.8282"
-                  [longitude]="longitude || -98.5795"></agm-marker>
+      <agm-marker [markerDraggable]="true" (dragEnd)="markerMoved($event)" [latitude]="latitude"
+                  [longitude]="longitude"></agm-marker>
     </agm-map>
   </div>
 </div>
@@ -40,16 +40,16 @@
 <div *ngIf="placeOfEvent">
   <agm-map [latitude]="placeOfEvent[0]" [longitude]="placeOfEvent[1]" [scrollwheel]="false"
            [zoom]="zoom" [mapTypeId]="'roadmap'">
-    <agm-marker [markerDraggable]="false" [latitude]="placeOfEvent[0]"
-                [longitude]="placeOfEvent[0]"></agm-marker>
+    <agm-marker [latitude]="placeOfEvent[0]"
+                [longitude]="placeOfEvent[1]"></agm-marker>
   </agm-map>
 </div>
 
 <div *ngIf="placeOfMeeting">
   <agm-map [latitude]="placeOfMeeting[0]" [longitude]="placeOfMeeting[1]" [scrollwheel]="false"
            [zoom]="zoom" [mapTypeId]="'roadmap'">
-    <agm-marker [markerDraggable]="false" [latitude]="placeOfMeeting[0]"
-                [longitude]="placeOfMeeting[0]"></agm-marker>
+    <agm-marker [latitude]="placeOfMeeting[0]"
+                [longitude]="placeOfMeeting[1]"></agm-marker>
   </agm-map>
 </div>
 

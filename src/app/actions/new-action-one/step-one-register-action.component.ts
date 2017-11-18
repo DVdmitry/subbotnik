@@ -15,6 +15,10 @@ import {MapsAPILoader} from '@agm/core';
 export class StepOneRegisterActionComponent implements OnInit {
   isLinear = false;
   correct = false;
+  changeEventPlace = false;
+  changeEventDate = false;
+  changeEventTime = false;
+
   basicInfoFormGroup: FormGroup;
   userAction: Action;
   meetingLatitude = false;
@@ -221,7 +225,7 @@ export class StepOneRegisterActionComponent implements OnInit {
       this.eventLatitude = true;
       this.userAction.addressLongitude = coordinates[1];
       coordinates[2].address_components.forEach(address =>
-        this.addressTest.push(address.long_name)
+        this.addressTest.unshift(address.long_name)
       );
       this.userAction.addressOfEvent = this.addressTest.join();
     }
@@ -234,7 +238,7 @@ export class StepOneRegisterActionComponent implements OnInit {
       this.meetingLatitude = true;
       this.userAction.meetingPlaceLongitude = coordinates[1];
       coordinates[2].address_components.forEach(address =>
-        this.addressTest.push(address.long_name)
+        this.addressTest.unshift(address.long_name)
       );
       this.userAction.meetingPlace = this.addressTest.join();
     }
