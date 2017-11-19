@@ -18,7 +18,10 @@ export class StepOneRegisterActionComponent implements OnInit {
   changeEventPlace = false;
   changeEventDate = false;
   changeEventTime = false;
-
+  changeStartEventDate = false;
+  changeFinishEventDate = false;
+  dateValidation = false;
+  incrementedEventStartInterval: any;
   basicInfoFormGroup: FormGroup;
   userAction: Action;
   meetingLatitude = false;
@@ -54,9 +57,11 @@ export class StepOneRegisterActionComponent implements OnInit {
     this.basicInfoFormGroup = this._formBuilder.group({
       eventName: ['', Validators.compose([Validators.required,
         Validators.minLength(2)])],
-      exactDate: ['', Validators.compose([Validators.required, Validators.nullValidator])],
-      startTime: ['', Validators.compose([Validators.required, Validators.nullValidator])],
+      exactDate: ['', Validators.nullValidator],
+      startTime: ['', Validators.nullValidator],
       finishTime: ['', Validators.nullValidator],
+      eventStartInterval: ['', Validators.nullValidator],
+      eventFinishInterval: ['', Validators.nullValidator],
       showInterval: false
     });
     this.citizenFormGroup = this._formBuilder.group({
@@ -104,12 +109,19 @@ export class StepOneRegisterActionComponent implements OnInit {
 
   addBasicInfo(post): void {
     this.userAction.eventName = post.eventName;
-    this.userAction.citizenPhoto = post.citizenPhoto;
-    this.userAction.exactDate = post.exactDate;
-    this.userAction.startTime = post.startTime;
-    this.userAction.finishTime = post.finishTime;
-    this.userAction.eventStartInterval = post.eventStartInterval;
-    this.userAction.eventFinishInterval = post.eventFinishInterval;
+    if (post.exactDate && post.startTime) {
+      this.userAction.exactDate = post.exactDate;
+      this.userAction.startTime = post.startTime;
+      this.userAction.finishTime = post.finishTime;
+      this.userAction.eventStartInterval = null;
+      this.userAction.eventFinishInterval = null;
+    } else {
+      this.userAction.exactDate = null;
+      this.userAction.startTime = null;
+      this.userAction.finishTime = null;
+      this.userAction.eventStartInterval = post.eventStartInterval;
+      this.userAction.eventFinishInterval = post.eventFinishInterval;
+    }
   }
 
   addFormDataCompany(post): void {
@@ -143,29 +155,7 @@ export class StepOneRegisterActionComponent implements OnInit {
   }
 
   customInterval(): void {
-    if (!this.showInterval) {
-      this.showInterval = true;
-      this.basicInfoFormGroup = this._formBuilder.group({
-        eventName: ['', Validators.compose([Validators.required,
-          Validators.minLength(2)])],
-        eventStartInterval: ['', Validators.compose([Validators.required, Validators.nullValidator])],
-        eventFinishInterval: ['', Validators.compose([Validators.required, Validators.nullValidator])],
-      });
-    } else {
-      this.showInterval = false;
-      this.basicInfoFormGroup = this._formBuilder.group({
-        eventName: ['', Validators.compose([Validators.required,
-          Validators.minLength(4)])],
-        exactDate: ['', Validators.compose([Validators.required, Validators.nullValidator])],
-        startTime: ['', Validators.compose([Validators.required, Validators.nullValidator])],
-        finishTime: ['', Validators.nullValidator],
-        showInterval: false
-      });
-    }
-  }
-
-  minInterval(date): void {
-    this.userAction.eventStartInterval = new Date(+date.eventStartInterval + 86400000);
+    this.showInterval = this.showInterval ? false : true;
   }
 
   addTelField(data): void {
@@ -246,5 +236,26 @@ export class StepOneRegisterActionComponent implements OnInit {
   correction(): void {
     this.preview = false;
     this.correct = true;
+  }
+  goPreview(): void {
+    this.preview = true;
+    this.correct = false;
+  }
+  addExactDate(date) {
+    this.userAction.exactDate = date.value;
+  }
+  addStartTime(time) {
+    this.userAction.startTime = time.timeStamp;
+    if (this.userAction.exactDate && this.userAction.startTime) {
+      this.userAction.eventStartInterval = null;
+      this.dateValidation = true;
+    }
+  }
+  minInterval(date): void {
+    this.incrementedEventStartInterval = new Date(+date.eventStartInterval + 86400000);
+    this.userAction.eventStartInterval = date.eventStartInterval;
+    if (this.userAction.eventStartInterval && !this.userAction.startTime) {
+      this.dateValidation = true;
+    }
   }
 }

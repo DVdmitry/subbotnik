@@ -27,7 +27,7 @@
 
                   <input matInput class='formwide-tooltip' id="actionDate" type="text" formControlName="exactDate"
                          [matDatepicker]="picker" placeholder="Дата проведения акции" [min]="minDate"
-                         [max]="maxDate">
+                         [max]="maxDate" (dateInput)="addExactDate($event)">
                   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
@@ -36,7 +36,7 @@
                 <div class="time-form go-flex" name="time-form">
                   <p class="padd-up-right">c</p>
                   <mat-form-field class="time-field">
-                    <input matInput type="time" formControlName="startTime">
+                    <input matInput type="time" formControlName="startTime" (change)="addStartTime($event)">
                   </mat-form-field>
                   <p class="padd-up-right">до</p>
                   <mat-form-field class="time-field">
@@ -66,7 +66,7 @@
                   </mat-form-field>
                   <mat-form-field class='pos-relative'>
                     <input matInput [matDatepicker]="pickerEndInterval" type="text"
-                           formControlName="eventFinishInterval" placeholder="по" [min]="eventStartInterval"
+                           formControlName="eventFinishInterval" placeholder="по" [min]="incrementedEventStartInterval"
                            [max]="maxDate">
                     <mat-datepicker-toggle matSuffix [for]="pickerEndInterval"></mat-datepicker-toggle>
                     <mat-datepicker #pickerEndInterval></mat-datepicker>
@@ -76,7 +76,7 @@
             </div>
 
             <div class="block-text-right">
-              <button mat-button matStepperNext type="submit" [disabled]="!basicInfoFormGroup.valid || !eventLatitude"
+              <button mat-button matStepperNext type="submit" [disabled]="!basicInfoFormGroup.valid || !eventLatitude || !dateValidation"
                       class="next-action">
                 Далее
               </button>
@@ -136,10 +136,10 @@
                                    formControlName="telNumberPrime" required>
                           </mat-form-field>
                         </div>
-                        <button mat-icon-button [class.disabled]="tels.length>1">
+                        <button mat-icon-button [class.vanish]="tels.length>1">
                           <mat-icon aria-label="Example icon-button with a heart icon"
                                     (click)="addTelField(citizenFormGroup.value)"
-                                    [class.disabled]="tels.length>1">add_circle_outline
+                                    [class.vanish]="tels.length>0 && tels[0].length > 1">add_circle_outline
                           </mat-icon>
                         </button>
                       </div>
@@ -147,9 +147,16 @@
                       <div *ngIf="tels[0] && tels[0].length > 1">
                         <div *ngFor="let tel of tels" class="go-flex-no-space">
                           <mat-form-field>
+                            <span matPrefix>+375 - &nbsp;</span>
                             <input matInput id="tel{{tels.length}}" placeholder="Контактный номер" type="tel"
                                    formControlName="telNumberAdd{{tels.length}}">
                           </mat-form-field>
+                          <button mat-icon-button [class.vanish]="tels.length>1">
+                            <mat-icon aria-label="Example icon-button with a heart icon"
+                                      (click)="addTelField(citizenFormGroup.value)"
+                                      [class.vanish]="tels.length > 1">add_circle_outline
+                            </mat-icon>
+                          </button>
                         </div>
                       </div>
 
@@ -174,7 +181,8 @@
                           </mat-form-field>
                         </div>
                         <button mat-icon-button [class.disabled]="sites.length>3">
-                          <mat-icon aria-label="Example icon-button with a heart icon" [class.disabled]="sites.length>3"
+                          <mat-icon aria-label="Example icon-button with a heart icon"
+                          [class.disabled]="sites.length>3"
                                     (click)="addSiteField(citizenFormGroup.value)">add_circle_outline
                           </mat-icon>
                         </button>
@@ -250,6 +258,40 @@
                       </mat-card-header>
                       <mat-card-content>
                         <div class="go-flex-no-space">
+                          <div matTooltip='Если с вами можно связаться по нескольким номерам, для надёжности лучше указать все.
+                           При этом первый номер будет считаться основным, а последующие – дополнительными. Формат номера: +375-291234567'
+                               class="formwide-tooltip">
+                            <mat-form-field>
+                              <span matPrefix>+375 - &nbsp;</span>
+                              <input matInput id="companyPhone" placeholder="Контактный номер" type="tel"
+                                     formControlName="telNumberPrime" required>
+                            </mat-form-field>
+                          </div>
+                          <button mat-icon-button [class.vanish]="tels.length>1">
+                            <mat-icon aria-label="Example icon-button with a heart icon"
+                                      (click)="addTelField(companyFormGroup.value)"
+                                      [class.vanish]="tels.length>0 && tels[0].length > 1">add_circle_outline
+                            </mat-icon>
+                          </button>
+                        </div>
+
+                        <div *ngIf="tels[0] && tels[0].length > 1">
+                          <div *ngFor="let tel of tels" class="go-flex-no-space">
+                            <mat-form-field>
+                              <span matPrefix>+375 - &nbsp;</span>
+                              <input matInput id="tel{{tels.length}}" placeholder="Контактный номер" type="tel"
+                                     formControlName="telNumberAdd{{tels.length}}">
+                            </mat-form-field>
+                            <button mat-icon-button [class.vanish]="tels.length>1">
+                              <mat-icon aria-label="Example icon-button with a heart icon"
+                                        (click)="addTelField(companyFormGroup.value)"
+                                        [class.vanish]="tels.length > 1">add_circle_outline
+                              </mat-icon>
+                            </button>
+                          </div>
+                        </div>
+
+                        <!-- <div class="go-flex-no-space">
                           <div matTooltip='Если с вами можно связаться по нескольким номерам, для надежности лучше указать все.
                            При этом первый номер будет считаться основным, а последующие - дополнительными'
                                class="formwide-tooltip">
@@ -275,7 +317,7 @@
                                      formControlName="telNumberAdd{{tels.length}}">
                             </mat-form-field>
                           </div>
-                        </div>
+                        </div> -->
 
                         <div class="go-flex-no-space">
                           <div matTooltip='Сюда будут приходить уведомления и напоминания по акции'
@@ -489,8 +531,61 @@
 
 <div *ngIf="preview">
   <br>
-  <p>исправлять можно оранжевыt поля (это фон, который можно убрать и получится чистый текст)</p>
-  <br>
+  <mat-card>
+    <mat-card-header class = "block-text-center">
+      <h4 class ="mat-display-1">Предпросмотр мероприятия</h4>
+    </mat-card-header>
+    <mat-card-content>
+      <h4 class="mat-subheading-2 bold">Название мероприятия: <span>{{userAction.eventName}}</span></h4>
+      <h4 class="mat-subheading-2 bold">Место проведения мероприятия: <span>{{userAction.addressOfEvent}}</span></h4>
+      <app-map [placeOfEvent]="eventCoordinates"></app-map>
+      <h4 *ngIf="userAction.exactDate" class="mat-subheading-2 bold">Дата проведения мероприятия: <span>{{userAction.exactDate | date:'fullDate'}}</span>
+      </h4>
+      <h4 *ngIf="userAction.startTime" class="mat-subheading-2 bold">Время начала
+        мероприятия:<span>{{userAction.startTime}}</span></h4>
+      <h4 *ngIf="userAction.finishTime" class="mat-subheading-2 bold">Время окончания мероприятия:<span>{{userAction.finishTime}}</span>
+      </h4>
+      <h4 *ngIf="userAction.eventStartInterval" class="mat-subheading-2 bold">Дата начала проведения акции:
+        {{userAction.eventStartInterval | date:'fullDate'}}</h4>
+      <h4 *ngIf="userAction.eventFinishInterval" class="mat-subheading-2 bold">Дата окончания
+        акции:{{userAction.eventFinishInterval | date:'fullDate'}}</h4>
+      <h4 class="mat-subheading-2 bold" *ngIf="userAction.citizenName">Организатор: {{userAction.citizenName}}</h4>
+      <h4 class="mat-subheading-2 bold" *ngIf="userAction.citizenPhoto">Фото организатора: {{userAction.citizenPhoto}}</h4>
+      <h4 class="mat-subheading-2 bold" *ngIf="userAction.companyName">Компания-организатор{{userAction.companyName}}</h4>
+      <h4 class="mat-subheading-2 bold" *ngIf="userAction.companyLogo">Логотип компании{{userAction.companyLogo}}</h4>
+      <h4 class="mat-subheading-2 bold" *ngIf="userAction.telNumberPrime">Основной номер телефона:{{userAction.telNumberPrime}}</h4>
+      <h4 class="mat-subheading-2 bold" *ngIf="userAction.telNumberAdd1">Дополнительный номер
+        телефона:{{userAction.telNumberAdd1}}</h4>
+      <h4 class="mat-subheading-2 bold" *ngIf="userAction.telNumberAdd2">Дополнительный номер
+        телефона:{{userAction.telNumberAdd2}}</h4>
+      <h4 class="mat-subheading-2 bold" *ngIf="userAction.usersEmail">Электронная почта:{{userAction.usersEmail}}</h4>
+      <h4 class="mat-subheading-2 bold" *ngIf="userAction.sitePrime">Сайт/соц.сеть:{{userAction.sitePrime}}</h4>
+      <h4 class="mat-subheading-2 bold" *ngIf="userAction.siteAdd1">Сайт/соц.сеть:{{userAction.siteAdd1}}</h4>
+      <h4 class="mat-subheading-2 bold" *ngIf="userAction.siteAdd2">Сайт/соц.сеть:{{userAction.siteAdd2}}</h4>
+      <h4 class="mat-subheading-2 bold" *ngIf="userAction.siteAdd3">Сайт/соц.сеть:{{userAction.siteAdd3}}</h4>
+      <h4 class="mat-subheading-2 bold" *ngIf="userAction.siteAdd4">Сайт/соц.сеть:{{userAction.siteAdd4}}</h4>
+      <h4 class="mat-subheading-2 bold" *ngIf="userAction.aboutEvent">О событии:{{userAction.aboutEvent}}</h4>
+      <h4 class="mat-subheading-2 bold" *ngIf="userAction.personToContact">С кем связываться:{{userAction.personToContact}}</h4>
+      <h4 class="mat-subheading-2 bold" *ngIf="userAction.placePicture">Фото местности:{{userAction.placePicture}}</h4>
+      <h4 class="mat-subheading-2 bold" *ngIf="userAction.meetingPlace">Место встречи: {{userAction.meetingPlace}}</h4>
+      <br>
+      <app-map [placeOfMeeting]="meetingCoordinates"></app-map>
+      <br>
+      <h4 class="mat-subheading-2 bold" *ngIf="userAction.getToPlace">Как добраться: {{userAction.getToPlace}}</h4>
+      <h4 class="mat-subheading-2 bold" *ngIf="userAction.whatToDo">Что будем делать: {{userAction.whatToDo}}</h4>
+      <h4 class="mat-subheading-2 bold" *ngIf="userAction.equipment">Что взять с собой: {{userAction.equipment}}</h4>
+      <h4 class="mat-subheading-2 bold" *ngIf="userAction.minPeople">Минимальное количество: {{userAction. minPeople}} чел.</h4>
+      <h4 class="mat-subheading-2 bold" *ngIf="userAction.maxPeople">Максимальное количество: {{userAction.maxPeople}} чел.</h4>
+      <h4 class="mat-subheading-2 bold" *ngIf="userAction.smthElse">Дополнительная информация:{{userAction.smthElse}}</h4>
+    </mat-card-content>
+  </mat-card>
+    <div class="go-flex">
+      <button mat-raised-button color="accent" (click)="correction()">< Редактировать</button>
+      <button mat-raised-button color="accent">Опубликовать ></button>
+    </div>
+</div>
+
+<div *ngIf="correct">
   <h4 class="mat-subheading-2 bold">Название мероприятия:
     <div class="correct"><input matInput [(ngModel)]="userAction.eventName"></div>
   </h4>
@@ -499,7 +594,8 @@
     <div class="d-inline-block">{{userAction.addressOfEvent}}</div>
   </h4>
 
-  <mat-checkbox class="example-margin mat-body-1" [(ngModel)]="changeEventPlace"> Изменить место проведения мероприятия
+  <mat-checkbox class="example-margin mat-body-1" [(ngModel)]="changeEventPlace"> Изменить место проведения
+    мероприятия
   </mat-checkbox>
   <br>
   <app-map *ngIf="!changeEventPlace" [placeOfEvent]="eventCoordinates"></app-map>
@@ -507,11 +603,12 @@
   <br>
 
   <div *ngIf="userAction.exactDate">
-    <h4  class="mat-body-2">Дата проведения:
+    <h4 class="mat-body-2">Дата проведения:
       <div class="d-inline-block">{{userAction.exactDate | date:'fullDate'}}</div>
     </h4>
 
-    <mat-checkbox class="example-margin mat-body-1" [(ngModel)]="changeEventDate"> Изменить дату проведения мероприятия
+    <mat-checkbox class="example-margin mat-body-1" [(ngModel)]="changeEventDate"> Изменить дату проведения
+      мероприятия
     </mat-checkbox>
     <mat-form-field *ngIf="changeEventDate" class="go-flex pos-relative">
       <input matInput id="actionDatePreview" type="text" [(ngModel)]="userAction.exactDate"
@@ -522,7 +619,7 @@
   </div>
 
   <div *ngIf="userAction.startTime">
-    <h4  class="mat-body-2">Время начала мероприятия:
+    <h4 class="mat-body-2">Время начала мероприятия:
       <div class="d-inline-block">{{userAction.startTime}}</div>
     </h4>
     <h4 *ngIf="userAction.finishTime" class="mat-body-2">Время окончания мероприятия:
@@ -531,7 +628,7 @@
     <mat-checkbox class="example-margin" [(ngModel)]="changeEventTime"> Изменить время проведения мероприятия
     </mat-checkbox>
 
-    <div *ngIf = "changeEventTime" class="time-form go-flex" name="time-form">
+    <div *ngIf="changeEventTime" class="time-form go-flex" name="time-form">
       <p class="padd-up-right">c</p>
       <mat-form-field class="time-field">
         <input matInput class="mat-body-1" type="time" [(ngModel)]="userAction.startTime">
@@ -541,45 +638,41 @@
         <input matInput class="mat-body-1" type="time" [(ngModel)]="userAction.finishTime">
       </mat-form-field>
     </div>
-  </div>
-  <hr>
-
-  <p class="mat-body-2" *ngIf="userAction.eventStartInterval">Дата начала акции: {{userAction.eventStartInterval}}</p>
-  <p class="mat-caption" *ngIf="userAction.eventFinishInterval">Дата окончания акции:
-    {{userAction.eventFinishInterval}}</p>
-  <p class="mat-body-2" *ngIf="userAction.citizenName">Организатор: {{userAction.citizenName}}</p>
-  <p class="mat-body-1" *ngIf="userAction.citizenPhoto">Фото организатора: {{userAction.citizenPhoto}}</p>
-  <p class="mat-caption" *ngIf="userAction.companyName">Компания-организатор{{userAction.companyName}}</p>
-  <p *ngIf="userAction.companyLogo">Логотип компании{{userAction.companyLogo}}</p>
-  <p *ngIf="userAction.telNumberPrime">Основной номер телефона:{{userAction.telNumberPrime}}</p>
-  <p *ngIf="userAction.telNumberAdd1">Дополнительный номер телефона:{{userAction.telNumberAdd1}}</p>
-  <p *ngIf="userAction.telNumberAdd2">Дополнительный номер телефона:{{userAction.telNumberAdd2}}</p>
-  <p *ngIf="userAction.usersEmail">Электронная почта:{{userAction.usersEmail}}</p>
-  <p *ngIf="userAction.sitePrime">Сайт/соц.сеть:{{userAction.sitePrime}}</p>
-  <p *ngIf="userAction.siteAdd1">Сайт/соц.сеть:{{userAction.siteAdd1}}</p>
-  <p *ngIf="userAction.siteAdd2">Сайт/соц.сеть:{{userAction.siteAdd2}}</p>
-  <p *ngIf="userAction.siteAdd3">Сайт/соц.сеть:{{userAction.siteAdd3}}</p>
-  <p *ngIf="userAction.siteAdd4">Сайт/соц.сеть:{{userAction.siteAdd4}}</p>
-  <p *ngIf="userAction.aboutEvent">О событии:{{userAction.aboutEvent}}</p>
-  <p *ngIf="userAction.personToContact">С кем связываться:{{userAction.personToContact}}</p>
-  <p *ngIf="userAction.placePicture">Фото местности:{{userAction.placePicture}}</p>
-  <p *ngIf="userAction.meetingPlace">Место встречи: {{userAction.meetingPlace}}</p>
-  <br>
-  <app-map [placeOfMeeting]="meetingCoordinates"></app-map>
-  <br>
-  <p *ngIf="userAction.getToPlace">Как добраться: {{userAction.getToPlace}}</p>
-  <p *ngIf="userAction.whatToDo">Что будем делать: {{userAction.whatToDo}}</p>
-  <p *ngIf="userAction.equipment">Что взять с собой: {{userAction.equipment}}</p>
-  <p *ngIf="userAction.minPeople">Минимальное количество: {{userAction. minPeople}} чел.</p>
-  <p *ngIf="userAction.maxPeople">Максимальное количество: {{userAction.maxPeople}} чел.</p>
-  <p *ngIf="userAction.smthElse">Дополнительная информация:{{userAction.smthElse}}</p>
-  <div class="go-flex">
-    <button mat-raised-button color="accent" (click)="correction()">< Редактировать</button>
-    <button mat-raised-button color="accent">Опубликовать ></button>
-  </div>
 </div>
 
-<div *ngIf="correct">
-  <h4 class="mat-h4">Название мероприятия: <input matInput [(ngModel)]="userAction.eventName"></h4>
-  <h4 class="mat-h4">Место проведения мероприятия: <input matInput [(ngModel)]="userAction.addressOfEvent"></h4>
+    <div *ngIf="userAction.eventStartInterval">
+      <h4 class="mat-body-2">Дата начала проведения акции:
+        <div class="d-inline-block">{{userAction.eventStartInterval | date:'fullDate'}}</div>
+      </h4>
+
+      <mat-checkbox class="example-margin mat-body-1" [(ngModel)]="changeStartEventDate"> Изменить дату начала проведения
+        мероприятия
+      </mat-checkbox>
+      <mat-form-field *ngIf="changeStartEventDate" class="go-flex pos-relative">
+        <input matInput id="changeStartEventDatePreview" type="text" [(ngModel)]="userAction.eventStartInterval"
+               [matDatepicker]="picker" [min]="minDate" [max]="maxDate">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div *ngIf="userAction.eventFinishInterval">
+      <h4 class="mat-body-2">Дата окончания проведения акции:
+        <div class="d-inline-block">{{userAction.eventFinishInterval | date:'fullDate'}}</div>
+      </h4>
+
+      <mat-checkbox class="example-margin mat-body-1" [(ngModel)]="changeFinishEventDate"> Изменить дату окончания проведения
+        мероприятия</mat-checkbox>
+      <mat-form-field *ngIf="changeFinishEventDate" class="go-flex pos-relative">
+        <input matInput id="changeFinishEventDatePreview" type="text" [(ngModel)]="userAction.eventFinishInterval"
+               [matDatepicker]="picker" [min]="minDate" [max]="maxDate">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div class="block-text-right">
+      <button mat-raised-button color="accent" (click)="goPreview()">Предпросмотр</button>
+    </div>
+
+
 </div>

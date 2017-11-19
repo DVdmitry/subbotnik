@@ -164,3 +164,8 @@ div .mat-slider-horizontal {
   font-variant: small-caps;
   font-weight: bolder;
 }
+
+.vanish {
+  color: transparent;
+  pointer-events: none;
+}
