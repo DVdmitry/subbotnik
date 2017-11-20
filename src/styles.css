@@ -9,7 +9,7 @@ a {
 }
 
 .time-field {
-  /*width: 80px;*/
+  width: 80px;
 }
 
 .padd-up-right{
@@ -145,6 +145,7 @@ div .mat-slider-horizontal {
   transform: scale(0.6);
 }
 
+
 .circle {
   background-color: #FFD740;
   border-radius: 50%;
@@ -152,7 +153,8 @@ div .mat-slider-horizontal {
 }
 
 .correct {
-  background-color: #FFD740;
+  border: 1px solid #e8e8e8;
+  box-shadow: #e8e8e8 1px 1px 1px 1px;
   display: inline-block;
 }
 
@@ -162,10 +164,22 @@ div .mat-slider-horizontal {
 
 .bold {
   font-variant: small-caps;
-  font-weight: bolder;
+  /*font-weight: bolder;*/
 }
 
 .vanish {
   color: transparent;
   pointer-events: none;
+}
+
+.padd-up-right-6 {
+  padding: 6% 2% 0 2%;
+}
+
+.red {
+  background-color: lightcoral;
+}
+
+.padd-left-right {
+  padding: 0% 2% 0% 2%;
 }

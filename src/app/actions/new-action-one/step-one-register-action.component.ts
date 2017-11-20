@@ -16,6 +16,7 @@ export class StepOneRegisterActionComponent implements OnInit {
   isLinear = false;
   correct = false;
   changeEventPlace = false;
+  changeMeetingPlace = false;
   changeEventDate = false;
   changeEventTime = false;
   changeStartEventDate = false;
@@ -42,8 +43,10 @@ export class StepOneRegisterActionComponent implements OnInit {
   max = 100;
   min = 0;
   step = 1;
-  value = 0;
-  thumbLabel = true;
+  minValue = 0;
+  maxValue = 0;
+  minThumbLabel = true;
+  maxThumbLabel = true;
   preview = false;
   @ViewChild('search')
   public searchElementRef: ElementRef;
@@ -191,12 +194,33 @@ export class StepOneRegisterActionComponent implements OnInit {
   }
 
   getMinPeople(data): void {
-    this.userAction.minPeople = data.value;
-    this.value = data.value + 1;
-    this.userAction.maxPeople = data.value + 1;
+    if (!this.userAction.maxPeople) {
+      this.minThumbLabel = true;
+      this.userAction.minPeople = data.value;
+      this.minValue = data.value;
+      this.userAction.maxPeople = data.value + 1;
+      this.maxValue = this.userAction.maxPeople;
+    }
+    if (data.value < this.userAction.maxPeople) {
+      this.minThumbLabel = true;
+      this.userAction.minPeople = data.value;
+      this.minValue = data.value;
+      // this.userAction.maxPeople = data.value + 1;
+    }
+    if (this.userAction.maxPeople && data.value > this.userAction.maxPeople) {
+      this.minValue = this.userAction.maxPeople - 1;
+      this.userAction.minPeople = this.minValue;
+      this.minThumbLabel = false;
+    }
   }
   getMaxPeople(data): void {
+    if (this.userAction.minPeople && data.value < this.userAction.minPeople) {
+      this.maxThumbLabel = false;
+      this.userAction.maxPeople = this.userAction.minPeople + 1;
+    } else {
+      this.maxThumbLabel = true;
       this.userAction.maxPeople = data.value;
+    }
   }
   addFormDataDetails(post): void {
     this.userAction.placePicture = post.placePicture;
