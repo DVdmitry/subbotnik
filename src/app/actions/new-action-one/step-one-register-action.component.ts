@@ -17,10 +17,7 @@ export class StepOneRegisterActionComponent implements OnInit {
   correct = false;
   changeEventPlace = false;
   changeMeetingPlace = false;
-  changeEventDate = false;
-  changeEventTime = false;
-  changeStartEventDate = false;
-  changeFinishEventDate = false;
+  citizenName: string;
   dateValidation = false;
   incrementedEventStartInterval: any;
   basicInfoFormGroup: FormGroup;
@@ -60,20 +57,21 @@ export class StepOneRegisterActionComponent implements OnInit {
     this.basicInfoFormGroup = this._formBuilder.group({
       eventName: ['', Validators.compose([Validators.required,
         Validators.minLength(2)])],
-      exactDate: ['', Validators.nullValidator],
+      exactDate: [{value:'', disabled: true}, Validators.nullValidator],
       startTime: ['', Validators.nullValidator],
       finishTime: ['', Validators.nullValidator],
-      eventStartInterval: ['', Validators.nullValidator],
-      eventFinishInterval: ['', Validators.nullValidator],
+      eventStartInterval: [{value:'', disabled: true}, Validators.nullValidator],
+      eventFinishInterval: [{value:'', disabled: true}, Validators.nullValidator],
       showInterval: false
     });
     this.citizenFormGroup = this._formBuilder.group({
       citizenName: ['', Validators.compose([Validators.required, Validators.minLength(5),
         Validators.maxLength(40)])],
       citizenPhoto: [''],
-      telNumberPrime: ['', Validators.compose([Validators.required, Validators.minLength(5)])],
-      telNumberAdd1: ['', Validators.min(5)],
-      telNumberAdd2: ['', Validators.min(5)],
+      telNumberPrime: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(9)])],
+      telNumberAdd1: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(9)])],
+      telNumberAdd2: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(9)])],
+      telNumberAdd3: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(9)])],
       usersEmail: ['', Validators.compose([Validators.required, Validators.email, Validators.minLength(5),
         Validators.maxLength(35)])],
       sitePrime: ['', Validators.minLength(4)],
@@ -87,9 +85,10 @@ export class StepOneRegisterActionComponent implements OnInit {
       companyName: ['', Validators.compose([Validators.required, Validators.minLength(5),
         Validators.maxLength(40)])],
       companyLogo: [''],
-      telNumberPrime: ['', Validators.compose([Validators.required, Validators.minLength(5)])],
-      telNumberAdd1: ['', Validators.min(5)],
-      telNumberAdd2: ['', Validators.min(5)],
+      telNumberPrime: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(9)])],
+      telNumberAdd1: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(9)])],
+      telNumberAdd2: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(9)])],
+      telNumberAdd3: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(9)])],
       usersEmail: ['', Validators.compose([Validators.required, Validators.email, Validators.minLength(5),
         Validators.maxLength(35)])],
       sitePrime: ['', Validators.minLength(4)],
@@ -112,8 +111,8 @@ export class StepOneRegisterActionComponent implements OnInit {
 
   addBasicInfo(post): void {
     this.userAction.eventName = post.eventName;
-    if (post.exactDate && post.startTime) {
-      this.userAction.exactDate = post.exactDate;
+    if (this.userAction.exactDate && post.startTime) {
+      // this.userAction.exactDate = post.exactDate;
       this.userAction.startTime = post.startTime;
       this.userAction.finishTime = post.finishTime;
       this.userAction.eventStartInterval = null;
@@ -122,8 +121,8 @@ export class StepOneRegisterActionComponent implements OnInit {
       this.userAction.exactDate = null;
       this.userAction.startTime = null;
       this.userAction.finishTime = null;
-      this.userAction.eventStartInterval = post.eventStartInterval;
-      this.userAction.eventFinishInterval = post.eventFinishInterval;
+      // this.userAction.eventStartInterval = post.eventStartInterval;
+      // this.userAction.eventFinishInterval = post.eventFinishInterval;
     }
   }
 
@@ -276,10 +275,14 @@ export class StepOneRegisterActionComponent implements OnInit {
     }
   }
   minInterval(date): void {
-    this.incrementedEventStartInterval = new Date(+date.eventStartInterval + 86400000);
-    this.userAction.eventStartInterval = date.eventStartInterval;
+    console.log(date.value);
+    this.incrementedEventStartInterval = new Date(+date.value + 86400000);
+    this.userAction.eventStartInterval = date.value;
     if (this.userAction.eventStartInterval && !this.userAction.startTime) {
       this.dateValidation = true;
     }
+  }
+  maxInterval(date): void {
+    this.userAction.eventFinishInterval = date.value;
   }
 }

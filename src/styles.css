@@ -164,7 +164,7 @@ div .mat-slider-horizontal {
 
 .bold {
   font-variant: small-caps;
-  /*font-weight: bolder;*/
+  font-weight: bold;
 }
 
 .vanish {
@@ -182,4 +182,17 @@ div .mat-slider-horizontal {
 
 .padd-left-right {
   padding: 0% 2% 0% 2%;
+}
+
+.border {
+  border: solid red;
+}
+
+.center {
+  margin: 0 auto;
+}
+
+.absolute {
+  position: absolute;
+  margin: -8%;
 }
