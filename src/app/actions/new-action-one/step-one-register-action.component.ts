@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Action} from '../action';
 import {AppService} from '../../app-service';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, FormControl, Validators} from '@angular/forms';
 import {ElementRef, NgZone, ViewChild} from '@angular/core';
 
 import {MapsAPILoader} from '@agm/core';
@@ -17,7 +17,8 @@ export class StepOneRegisterActionComponent implements OnInit {
   correct = false;
   changeEventPlace = false;
   changeMeetingPlace = false;
-  citizenName: string;
+  isCitizenName = false;
+  isCompanyName = false;
   dateValidation = false;
   incrementedEventStartInterval: any;
   basicInfoFormGroup: FormGroup;
@@ -48,30 +49,51 @@ export class StepOneRegisterActionComponent implements OnInit {
   @ViewChild('search')
   public searchElementRef: ElementRef;
 
+  // formConrols - formatting form
+  eventName: any;
+  exactDate: any;
+  startInterval: any;
+  finishInterval: any;
+  citizenName: any;
+  companyName: any;
+  telNumberPrime: any;
+  email: any;
+
+
   constructor(private service: AppService, private _formBuilder: FormBuilder, private mapsAPILoader: MapsAPILoader,
               private ngZone: NgZone) {
   }
 
   ngOnInit(): void {
     this.service.getAction().then(response => this.userAction = response);
+
+    this.eventName = new FormControl('', [Validators.required, Validators.minLength(2)]);
+    this.exactDate = new FormControl({value: '', disabled: true});
+    this.startInterval = new FormControl({value: '', disabled: true});
+    this.finishInterval = new FormControl({value: '', disabled: true});
+    this.citizenName = new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(40)]);
+    this.companyName = new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(40)]);
+    this.telNumberPrime = new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(9)]);
+    this.email = new FormControl('', [Validators.required, Validators.email]);
+
     this.basicInfoFormGroup = this._formBuilder.group({
       eventName: ['', Validators.compose([Validators.required,
         Validators.minLength(2)])],
-      exactDate: [{value:'', disabled: true}, Validators.nullValidator],
+      exactDate: [{value: '', disabled: true}, Validators.nullValidator],
       startTime: ['', Validators.nullValidator],
       finishTime: ['', Validators.nullValidator],
-      eventStartInterval: [{value:'', disabled: true}, Validators.nullValidator],
-      eventFinishInterval: [{value:'', disabled: true}, Validators.nullValidator],
+      eventStartInterval: [{value: '', disabled: true}, Validators.nullValidator],
+      eventFinishInterval: [{value: '', disabled: true}, Validators.nullValidator],
       showInterval: false
     });
     this.citizenFormGroup = this._formBuilder.group({
-      citizenName: ['', Validators.compose([Validators.required, Validators.minLength(5),
+      citizenName: ['', Validators.compose([Validators.required, Validators.minLength(2),
         Validators.maxLength(40)])],
       citizenPhoto: [''],
       telNumberPrime: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(9)])],
-      telNumberAdd1: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(9)])],
-      telNumberAdd2: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(9)])],
-      telNumberAdd3: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(9)])],
+      telNumberAdd1: ['', Validators.compose([Validators.minLength(5), Validators.maxLength(9)])],
+      telNumberAdd2: ['', Validators.compose([Validators.minLength(5), Validators.maxLength(9)])],
+      telNumberAdd3: ['', Validators.compose([Validators.minLength(5), Validators.maxLength(9)])],
       usersEmail: ['', Validators.compose([Validators.required, Validators.email, Validators.minLength(5),
         Validators.maxLength(35)])],
       sitePrime: ['', Validators.minLength(4)],
@@ -82,15 +104,14 @@ export class StepOneRegisterActionComponent implements OnInit {
       aboutEvent: ['', Validators.maxLength(700)],
     });
     this.companyFormGroup = this._formBuilder.group({
-      companyName: ['', Validators.compose([Validators.required, Validators.minLength(5),
+      companyName: ['', Validators.compose([Validators.required, Validators.minLength(2),
         Validators.maxLength(40)])],
       companyLogo: [''],
       telNumberPrime: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(9)])],
-      telNumberAdd1: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(9)])],
-      telNumberAdd2: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(9)])],
-      telNumberAdd3: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(9)])],
-      usersEmail: ['', Validators.compose([Validators.required, Validators.email, Validators.minLength(5),
-        Validators.maxLength(35)])],
+      telNumberAdd1: ['', Validators.compose([Validators.minLength(5), Validators.maxLength(9)])],
+      telNumberAdd2: ['', Validators.compose([Validators.minLength(5), Validators.maxLength(9)])],
+      telNumberAdd3: ['', Validators.compose([Validators.minLength(5), Validators.maxLength(9)])],
+      usersEmail: ['', Validators.compose([Validators.required, Validators.email])],
       sitePrime: ['', Validators.minLength(4)],
       siteAdd1: ['', Validators.minLength(4)],
       siteAdd2: ['', Validators.minLength(4)],
@@ -285,4 +306,29 @@ export class StepOneRegisterActionComponent implements OnInit {
   maxInterval(date): void {
     this.userAction.eventFinishInterval = date.value;
   }
+
+  isCompanyFormDisable(data): void {
+    this.isCitizenName = data.citizenName.length > 2? true : false;
 }
+  isCitizenFormDisable(data): void {
+    this.isCompanyName = data.companyName.length > 2? true : false;
+  }
+  getEmptyErrorMessage() {
+    return this.eventName.hasError('required') ? 'Введите название акции' : '';
+  }
+  getCitizenErrorMessage() {
+    return this.citizenName.hasError('required') ? 'Введите ваше имя' : '';
+  }
+  getCompanyErrorMessage() {
+    return this.companyName.hasError('required') ? 'Введите название компании' : '';
+  }
+  getTelErrorMessage() {
+    return this.telNumberPrime.hasError('required') ? 'Введите правильный номер' : '';
+  }
+  getEmailErrorMessage() {
+    return this.email.hasError('required') ? 'Введите ваш email' :
+      this.email.hasError('email') ? 'Email должен содержать - @' :
+      '';
+  }
+}
+
