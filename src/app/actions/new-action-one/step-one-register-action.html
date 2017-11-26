@@ -1,6 +1,13 @@
 <button mat-button (click)="isLinear = true" id="toggle-linear">stepper без валидации</button>
-
-
+<mat-card>
+  <mat-card-content>
+<p class="mat-body-1">Чтобы создать страницу акции на subbotnik.by, нужно указать информацию, которая
+  будет интересна и важна для потенциальных волонтёров: что это за акция, когда и где она пройдёт,
+  кто её организует, что нужно для участия в ней. Предлагаем внести все эти данные в 3 простых шага.
+  Обязательные поля отмечены звёздочкой (*).</p>
+  </mat-card-content>
+</mat-card>
+<br>
 <div *ngIf="!preview && !correct">
   <mat-card>
     <mat-card-content>
@@ -13,7 +20,7 @@
             <div matTooltip='Например: Субботник в Осмоловке или Уборка левого берега р. Ислочь'
                  class="formwide-tooltip">
               <mat-form-field>
-                <input matInput placeholder="Название акции" formControlName="eventName">
+                <input matInput placeholder="Название акции" formControlName="eventName" autofocus>
               </mat-form-field>
             </div>
 
@@ -52,6 +59,7 @@
             </mat-checkbox>
 
             <div *ngIf='showInterval'>
+              <br>
               <div matTooltip='Дату и время акции в дальнейшем можно будет уточнить, отредактировав
                                 страницу акции. Все подписавшиеся на акцию волнтёры получат об этом
                                 уведомление, так что все будут в курсе.'
@@ -99,7 +107,6 @@
               <!--<app-citizen></app-citizen>-->
               <form [formGroup]="citizenFormGroup" (ngSubmit)="addFormDataCitizen(citizenFormGroup.value)">
                 <div class="demo-tab-content" [class.disabled]="isCompanyName">
-                  <div class="go-flex-no-space">
                     <div>
                       <label for="citizenName">Как вас зовут?</label>
                       <div matTooltip='Волонтёрам важно знать, с кем они будут контактировать'
@@ -111,14 +118,18 @@
                       </div>
                     </div>
                     <div>
-                      <label for="citizenPhoto" class="upload-photo">Ваше фото</label>
+                      <label for="citizenPhoto">Ваше фото (используйте форматы jpeg/jpg)</label>
                       <div matTooltip='Загрузите свое фото, чтобы при встрече волонтерам было проще вас узнать'
-                           class="formwide-tooltip upload-photo">
-                        <input type="file" id="citizenPhoto" formControlName="citizenPhoto"
-                               placeholder="Фото не выбрано">
+                           class="formwide-tooltip upload-photo go-flex" >
+                        <input type="file" id="citizenPhoto" #citizenPhoto formControlName="citizenPhoto"
+                               placeholder="Фото не выбрано" class="marg-top-6" (change)="setCitizenPhoto($event)">
+                        <mat-icon *ngIf="userAction && userAction.citizenPhoto" aria-label="Example icon-button with a heart icon"
+                                  (click)="removeCitizenPhoto()" class="marg-top-6">remove_circle_outline
+                        </mat-icon>
                       </div>
+                      <div id= "toolTipCitizen"></div>
                     </div>
-                  </div>
+                  <br>
 
                   <mat-card class="example-card">
                     <mat-card-header>
@@ -235,7 +246,7 @@
                 <div class="demo-tab-content" [class.disabled]="isCitizenName">
                   <!--<app-company></app-company>-->
                   <div class="demo-tab-content">
-                    <div class="go-flex-no-space">
+
                       <div>
                         <label for="companyName">Как называется ваша организация?</label>
                         <div matTooltip='Чтобы к вашей акции было больше доверия, лучше указать название организации'
@@ -247,16 +258,21 @@
                           </mat-form-field>
                         </div>
                       </div>
+
                       <div>
-                        <label for="companyPhoto" class="upload-photo">Ваш логотип</label>
+                        <label for="companyPhoto">Ваш логотип (используйте форматы jpeg/jpg)</label>
                         <div matTooltip='Если у вас есть логотип, обязательно добавте его на страницу акции, чтобы вас
                                             было проще и быстрее узнать'
-                             class="formwide-tooltip upload-photo">
-                          <input type="file" id="companyPhoto" formControlName="companyLogo"
-                                 placeholder="Фото не выбрано">
+                             class="formwide-tooltip go-flex">
+                          <input type="file" id="companyPhoto" #companyPhoto formControlName="companyLogo"
+                                 placeholder="Фото не выбрано" class="marg-top-6" (change)="setCompanyPhoto($event)">
+                          <mat-icon *ngIf="userAction && userAction.companyPhoto" aria-label="Example icon-button with a heart icon"
+                                    (click)="removeCompanyPhoto()" class="marg-top-6">remove_circle_outline
+                          </mat-icon>
                         </div>
+                        <div id= "toolTipCompany"></div>
                       </div>
-                    </div>
+                    <br>
 
                     <mat-card class="example-card">
                       <mat-card-header>
@@ -816,7 +832,8 @@
     </mat-card-content>
   </mat-card>
   <div class="block-text-right">
-    <button mat-button (click)="goPreview()" [disabled]="!eventName.valid || !citizenName.valid || !telNumberPrime.valid || !email.valid">Предпросмотр</button>
+    <button mat-button (click)="goPreview()" [disabled]="!eventName.valid || !citizenName.valid && !companyName.valid || !telNumberPrime.valid || !email.valid">Предпросмотр</button>
   </div>
 </div>
+
 

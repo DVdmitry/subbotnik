@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ElementRef, NgZone, ViewChild} from '@angular/core';
 import {Action} from '../action';
 import {AppService} from '../../app-service';
 import {FormBuilder, FormGroup, FormControl, Validators} from '@angular/forms';
-import {ElementRef, NgZone, ViewChild} from '@angular/core';
+
 
 import {MapsAPILoader} from '@agm/core';
 
@@ -13,6 +13,8 @@ import {MapsAPILoader} from '@agm/core';
 })
 
 export class StepOneRegisterActionComponent implements OnInit {
+  @ViewChild('citizenPhoto') citizenPhotoVariable: any;
+  @ViewChild('companyPhoto') companyPhotoVariable: any;
   isLinear = false;
   correct = false;
   changeEventPlace = false;
@@ -80,7 +82,7 @@ export class StepOneRegisterActionComponent implements OnInit {
       eventName: ['', Validators.compose([Validators.required,
         Validators.minLength(2)])],
       exactDate: [{value: '', disabled: true}, Validators.nullValidator],
-      startTime: ['', Validators.nullValidator],
+      startTime: ['', Validators.compose([Validators.nullValidator])],
       finishTime: ['', Validators.nullValidator],
       eventStartInterval: [{value: '', disabled: true}, Validators.nullValidator],
       eventFinishInterval: [{value: '', disabled: true}, Validators.nullValidator],
@@ -330,5 +332,47 @@ export class StepOneRegisterActionComponent implements OnInit {
       this.email.hasError('email') ? 'Email должен содержать - @' :
       '';
   }
-}
+  setCitizenPhoto(file) {
+    let errorMessage: any;
+    let toolTipCitizen: any;
+    console.log(document.querySelector('.errorMessage'))
+    if (file.target.files[0].type !== 'image/jpeg' && !document.querySelector('.errorMessage')) {
+      errorMessage = document.createElement('p');
+      errorMessage.innerHTML = 'Прикрепите файл с расширением jpeg/jpg';
+      errorMessage.setAttribute('class', 'errorMessage');
+      toolTipCitizen = document.querySelector('#toolTipCitizen');
+      toolTipCitizen.appendChild(errorMessage);
+      this.citizenPhotoVariable.nativeElement.value = '';
+    }
+    if (file.target.files[0].type === 'image/jpeg'  && document.querySelector('.errorMessage') !== undefined) {
+      this.userAction.citizenPhoto = file.target.files[0].name;
+      errorMessage = document.querySelector('.errorMessage');
+      errorMessage.className = errorMessage.className.replace('errorMessage', 'invisible');
+    }
+  }
+  removeCitizenPhoto() {
+    this.citizenPhotoVariable.nativeElement.value = '';
+  }
 
+  setCompanyPhoto(file) {
+    let errorMessage: any;
+    let toolTipCompany: any;
+    console.log(document.querySelector('.errorMessage'))
+    if (file.target.files[0].type !== 'image/jpeg' && !document.querySelector('.errorMessage')) {
+      errorMessage = document.createElement('p');
+      errorMessage.innerHTML = 'Прикрепите файл с расширением jpeg/jpg';
+      errorMessage.setAttribute('class', 'errorMessage');
+      toolTipCompany = document.querySelector('#toolTipCompany');
+      toolTipCompany.appendChild(errorMessage);
+      this.companyPhotoVariable.nativeElement.value = '';
+    }
+    if (file.target.files[0].type === 'image/jpeg'  && document.querySelector('.errorMessage') !== undefined) {
+      this.userAction.companyPhoto = file.target.files[0].name;
+      errorMessage = document.querySelector('.errorMessage');
+      errorMessage.className = errorMessage.className.replace('errorMessage', 'invisible');
+    }
+  }
+  removeCompanyPhoto() {
+    this.companyPhotoVariable.nativeElement.value = '';
+  }
+}

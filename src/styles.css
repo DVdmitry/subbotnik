@@ -57,11 +57,13 @@ a {
   display: flex;
 }
 
-.upload-photo {
-  margin-left: 3%;
+.marg-top-3 {
+  margin-top: 3%;
 }
-#citizenPhoto {
+
+.marg-top-6 {
   margin-top: 6%;
+  position: relative;
 }
 
 .border {
@@ -192,7 +194,11 @@ div .mat-slider-horizontal {
   margin: 0 auto;
 }
 
-.absolute {
-  position: absolute;
-  margin: -8%;
+.errorMessage {
+  color: red;
+  font-size: 10px;
+}
+
+.hide {
+  visibility: hidden;
 }
