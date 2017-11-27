@@ -102,7 +102,7 @@
           <!--<app-register-tab></app-register-tab>-->
           <!--Tab Citize-Company-->
           <mat-tab-group class="demo-tab-group">
-            <mat-tab label="Я - физическое лицо">
+            <mat-tab [disabled]="isCompanyName" label="Я физическое лицо">
               <!--Citizen Form-->
               <!--<app-citizen></app-citizen>-->
               <form [formGroup]="citizenFormGroup" (ngSubmit)="addFormDataCitizen(citizenFormGroup.value)">
@@ -118,15 +118,17 @@
                       </div>
                     </div>
                     <div>
-                      <label for="citizenPhoto">Ваше фото (используйте форматы jpeg/jpg)</label>
+                      <label for="citizenPhoto">Ваше фото <span class = "small-placeholder">(используйте форматы jpeg/jpg)</span></label>
                       <div matTooltip='Загрузите свое фото, чтобы при встрече волонтерам было проще вас узнать'
-                           class="formwide-tooltip upload-photo go-flex" >
+                           class="formwide-tooltip go-flex" >
                         <input type="file" id="citizenPhoto" #citizenPhoto formControlName="citizenPhoto"
                                placeholder="Фото не выбрано" class="marg-top-6" (change)="setCitizenPhoto($event)">
                         <mat-icon *ngIf="userAction && userAction.citizenPhoto" aria-label="Example icon-button with a heart icon"
-                                  (click)="removeCitizenPhoto()" class="marg-top-6">remove_circle_outline
+                                  (click)="removeCitizenPhoto()" class="marg-top-6">clear
                         </mat-icon>
                       </div>
+
+
                       <div id= "toolTipCitizen"></div>
                     </div>
                   <br>
@@ -147,7 +149,7 @@
                           <mat-form-field>
                             <span matPrefix>+375 - &nbsp;</span>
                             <input matInput id="citizenPhone" placeholder="Контактный номер" type="tel"
-                                   formControlName="telNumberPrime" maxlength="9" required>
+                                   formControlName="telNumberPrime" minlength="9" maxlength="9" required>
                           </mat-form-field>
                         </div>
                         <button mat-icon-button [class.vanish]="tels.length>1">
@@ -162,7 +164,7 @@
                         <div *ngFor="let tel of tels" class="go-flex-no-space">
                           <mat-form-field>
                             <span matPrefix>+375 - &nbsp;</span>
-                            <input matInput maxlength="9" id="tel{{tels.length}}" placeholder="Контактный номер"
+                            <input matInput minlength="9" maxlength="9" id="tel{{tels.length}}" placeholder="Контактный номер"
                                    type="tel"
                                    formControlName="telNumberAdd{{tels.length}}">
                           </mat-form-field>
@@ -241,9 +243,9 @@
             </mat-tab>
 
             <!--Company-->
-            <mat-tab label="Я - представитель организации">
+            <mat-tab [disabled]="isCitizenName" label="Я представитель организации">
               <form [formGroup]="companyFormGroup" (ngSubmit)="addFormDataCompany(companyFormGroup.value)">
-                <div class="demo-tab-content" [class.disabled]="isCitizenName">
+                <div class="demo-tab-content" >
                   <!--<app-company></app-company>-->
                   <div class="demo-tab-content">
 
@@ -260,14 +262,14 @@
                       </div>
 
                       <div>
-                        <label for="companyPhoto">Ваш логотип (используйте форматы jpeg/jpg)</label>
+                        <label for="companyPhoto">Ваш логотип <span class = "small-placeholder">(используйте форматы jpeg/jpg)</span></label>
                         <div matTooltip='Если у вас есть логотип, обязательно добавте его на страницу акции, чтобы вас
                                             было проще и быстрее узнать'
                              class="formwide-tooltip go-flex">
                           <input type="file" id="companyPhoto" #companyPhoto formControlName="companyLogo"
                                  placeholder="Фото не выбрано" class="marg-top-6" (change)="setCompanyPhoto($event)">
                           <mat-icon *ngIf="userAction && userAction.companyPhoto" aria-label="Example icon-button with a heart icon"
-                                    (click)="removeCompanyPhoto()" class="marg-top-6">remove_circle_outline
+                                    (click)="removeCompanyPhoto()" class="marg-top-6">clear
                           </mat-icon>
                         </div>
                         <div id= "toolTipCompany"></div>
@@ -371,7 +373,7 @@
                       <div>
                         <p>
                           <mat-form-field class="example-full-width">
-                          <textarea matInput rows=3
+                          <textarea matInput rows=3 id = "smthToAdd" formControlName="aboutEvent"
                                     placeholder="Напишите почему решили организовать акцию и т.д."></textarea>
                           </mat-form-field>
                         </p>
@@ -396,18 +398,21 @@
           <form [formGroup]="eventDetailFormGroup" (ngSubmit)="addFormDataDetails(eventDetailFormGroup.value)">
             <ng-template matStepLabel>Подробности акции</ng-template>
             <section>
-              <label for="placePicture" class="subheading-1">Фото места проведения акции</label>
+              <label for="placePicture" class="subheading-1">Фото места проведения акции
+                <span class = "small-placeholder">(используйте форматы jpeg/jpg)</span></label>
               <div matTooltip='Если у вас есть хорошее фото места проведения акции, загрузите его,
                           пожалуйста, чтобы дополнительно вдохновить волонтёров. Минимальный
                           размер: X на Y пикселей (Z мегабайт). Максимальный размер: K на L
                           пикселей (M мегабайт).'
-                   class="formwide-tooltip">
+                   class="formwide-tooltip" id = "toolTipPlacePict">
 
-                <div class="box-upload-picture block-text-center">
-                  <!--<p class="blue"></p>-->
-                  <img *ngIf="placePict" src="{{placePict}}">
-                </div>
-                <input type="file" formControlName="placePicture" id="placePicture">
+                <div class="box-upload-picture block-text-center"></div>
+                <div class="go-flex">
+                <input type="file" #placePicture formControlName="placePicture" id="placePicture" (change)="setPlacePicture($event)">
+                <mat-icon *ngIf="userAction && userAction.placePicture" aria-label="Example icon-button with a heart icon"
+                          (click)="removePlacePicture()">clear
+                </mat-icon>
+              </div>
               </div>
               <div matTooltip='Местом сбора может быть остановка транспорта,
                             авто- или ж/д вокзал, местная достопримечательность и т. д.'
@@ -415,11 +420,7 @@
                 <p class="mat-body-1">Где будет место сбора волонтеров?*</p>
               </div>
             </section>
-
-
-            <section>
               <app-map (getMeetingLat)="getMeetingLat($event)"></app-map>
-            </section>
             <br>
 
 
@@ -455,8 +456,8 @@
 
             <section>
               <label for="equipment">Что нужно взять с собой? Что выдадут на месте?</label>
-              <div matTooltip='Участникам будут выданы пакеты для мусора и перчатки. С собой
-                           нужно взять еду и воду для перекуса'
+              <div matTooltip='Например: «Участникам будут выданы пакеты для мусора и перчатки.
+               С собой нужно взять еду и воду для перекуса»'
                    class="formwide-tooltip">
                 <p>
                   <mat-form-field class="example-full-width">
@@ -512,7 +513,7 @@
             </section>
 
             <div class="go-flex">
-              <button mat-button matStepperPrevious>Назад</button>
+              <button mat-button matStepperPrevious (click)="goPrevious($event)">Назад</button>
               <button mat-button type="submit" [disabled]="!meetingLatitude">Предпросмотр</button>
             </div>
           </form>
@@ -525,45 +526,46 @@
 <div *ngIf="preview">
   <br>
   <mat-card>
-    <mat-card-header class="block-text-center">
-      <h4 class="mat-display-1">Предпросмотр мероприятия</h4>
+    <mat-card-header>
+      <h4 class="mat-display-1 center">Предпросмотр акции</h4>
     </mat-card-header>
     <mat-card-content>
       <h4 class="mat-subheading-1">Название мероприятия: <span>{{userAction.eventName}}</span></h4>
       <h4 class="mat-subheading-1">Место проведения мероприятия: <span>{{userAction.addressOfEvent}}</span></h4>
       <app-map [placeOfEvent]="eventCoordinates"></app-map>
+      <br>
       <h4 *ngIf="userAction.exactDate" class="mat-subheading-1">Дата проведения мероприятия: <span>{{userAction.exactDate | date:'fullDate'}}</span>
       </h4>
       <h4 *ngIf="userAction.startTime" class="mat-subheading-1">Время начала
-        мероприятия:<span>{{userAction.startTime}}</span></h4>
-      <h4 *ngIf="userAction.finishTime" class="mat-subheading-1">Время окончания мероприятия:<span>{{userAction.finishTime}}</span>
+        мероприятия: <span>{{userAction.startTime}}</span></h4>
+      <h4 *ngIf="userAction.finishTime" class="mat-subheading-1">Время окончания мероприятия: <span>{{userAction.finishTime}}</span>
       </h4>
       <h4 *ngIf="userAction.eventStartInterval" class="mat-subheading-1">Дата начала проведения акции:
         {{userAction.eventStartInterval | date:'fullDate'}}</h4>
-      <h4 *ngIf="userAction.eventFinishInterval" class="mat-subheading-1">Дата окончания
+      <h4 *ngIf="userAction.eventFinishInterval" class="mat-subheading-1">Дата окончания:
         акции:{{userAction.eventFinishInterval | date:'fullDate'}}</h4>
       <h4 class="mat-subheading-1 " *ngIf="userAction.citizenName">Организатор: {{userAction.citizenName}}</h4>
       <h4 class="mat-subheading-1 " *ngIf="userAction.citizenPhoto">Фото организатора:
         {{userAction.citizenPhoto}}</h4>
       <h4 class="mat-subheading-1 " *ngIf="userAction.companyName">
-        Компания-организатор{{userAction.companyName}}</h4>
-      <h4 class="mat-subheading-1 " *ngIf="userAction.companyLogo">Логотип компании{{userAction.companyLogo}}</h4>
+        Компания-организатор: {{userAction.companyName}}</h4>
+      <h4 class="mat-subheading-1 " *ngIf="userAction.companyLogo">Логотип компании: {{userAction.companyLogo}}</h4>
       <h4 class="mat-subheading-1 " *ngIf="userAction.telNumberPrime">Основной номер
-        телефона:{{userAction.telNumberPrime}}</h4>
+        телефона: {{userAction.telNumberPrime}}</h4>
       <h4 class="mat-subheading-1 " *ngIf="userAction.telNumberAdd1">Дополнительный номер
-        телефона:{{userAction.telNumberAdd1}}</h4>
+        телефона: {{userAction.telNumberAdd1}}</h4>
       <h4 class="mat-subheading-1 " *ngIf="userAction.telNumberAdd2">Дополнительный номер
-        телефона:{{userAction.telNumberAdd2}}</h4>
-      <h4 class="mat-subheading-1 " *ngIf="userAction.usersEmail">Электронная почта:{{userAction.usersEmail}}</h4>
-      <h4 class="mat-subheading-1 " *ngIf="userAction.sitePrime">Сайт/соц.сеть:{{userAction.sitePrime}}</h4>
-      <h4 class="mat-subheading-1 " *ngIf="userAction.siteAdd1">Сайт/соц.сеть:{{userAction.siteAdd1}}</h4>
-      <h4 class="mat-subheading-1 " *ngIf="userAction.siteAdd2">Сайт/соц.сеть:{{userAction.siteAdd2}}</h4>
-      <h4 class="mat-subheading-1 " *ngIf="userAction.siteAdd3">Сайт/соц.сеть:{{userAction.siteAdd3}}</h4>
-      <h4 class="mat-subheading-1 " *ngIf="userAction.siteAdd4">Сайт/соц.сеть:{{userAction.siteAdd4}}</h4>
-      <h4 class="mat-subheading-1 " *ngIf="userAction.aboutEvent">О событии:{{userAction.aboutEvent}}</h4>
+        телефона: {{userAction.telNumberAdd2}}</h4>
+      <h4 class="mat-subheading-1 " *ngIf="userAction.usersEmail">Электронная почта: {{userAction.usersEmail}}</h4>
+      <h4 class="mat-subheading-1 " *ngIf="userAction.sitePrime">Сайт/соц.сеть: {{userAction.sitePrime}}</h4>
+      <h4 class="mat-subheading-1 " *ngIf="userAction.siteAdd1">Сайт/соц.сеть: {{userAction.siteAdd1}}</h4>
+      <h4 class="mat-subheading-1 " *ngIf="userAction.siteAdd2">Сайт/соц.сеть: {{userAction.siteAdd2}}</h4>
+      <h4 class="mat-subheading-1 " *ngIf="userAction.siteAdd3">Сайт/соц.сеть: {{userAction.siteAdd3}}</h4>
+      <h4 class="mat-subheading-1 " *ngIf="userAction.siteAdd4">Сайт/соц.сеть: {{userAction.siteAdd4}}</h4>
+      <h4 class="mat-subheading-1 " *ngIf="userAction.aboutEvent">О событии: {{userAction.aboutEvent}}</h4>
       <h4 class="mat-subheading-1 " *ngIf="userAction.personToContact">С кем
         связываться:{{userAction.personToContact}}</h4>
-      <h4 class="mat-subheading-1 " *ngIf="userAction.placePicture">Фото местности:{{userAction.placePicture}}</h4>
+      <h4 class="mat-subheading-1 " *ngIf="userAction.placePicture">Фото местности: {{userAction.placePicture}}</h4>
       <h4 class="mat-subheading-1 " *ngIf="userAction.meetingPlace">Место встречи: {{userAction.meetingPlace}}</h4>
       <br>
       <app-map [placeOfMeeting]="meetingCoordinates"></app-map>
@@ -576,7 +578,7 @@
       <h4 class="mat-subheading-1 " *ngIf="userAction.maxPeople">Максимальное количество: {{userAction.maxPeople}}
         чел.</h4>
       <h4 class="mat-subheading-1 " *ngIf="userAction.smthElse">Дополнительная
-        информация:{{userAction.smthElse}}</h4>
+        информация: {{userAction.smthElse}}</h4>
     </mat-card-content>
   </mat-card>
   <div class="go-flex">

@@ -15,6 +15,7 @@ import {MapsAPILoader} from '@agm/core';
 export class StepOneRegisterActionComponent implements OnInit {
   @ViewChild('citizenPhoto') citizenPhotoVariable: any;
   @ViewChild('companyPhoto') companyPhotoVariable: any;
+  @ViewChild('placePicture') placePictVariable: any;
   isLinear = false;
   correct = false;
   changeEventPlace = false;
@@ -92,10 +93,10 @@ export class StepOneRegisterActionComponent implements OnInit {
       citizenName: ['', Validators.compose([Validators.required, Validators.minLength(2),
         Validators.maxLength(40)])],
       citizenPhoto: [''],
-      telNumberPrime: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(9)])],
-      telNumberAdd1: ['', Validators.compose([Validators.minLength(5), Validators.maxLength(9)])],
-      telNumberAdd2: ['', Validators.compose([Validators.minLength(5), Validators.maxLength(9)])],
-      telNumberAdd3: ['', Validators.compose([Validators.minLength(5), Validators.maxLength(9)])],
+      telNumberPrime: ['', Validators.compose([Validators.required, Validators.minLength(9), Validators.maxLength(9)])],
+      telNumberAdd1: ['', Validators.compose([Validators.minLength(9), Validators.maxLength(9)])],
+      telNumberAdd2: ['', Validators.compose([Validators.minLength(9), Validators.maxLength(9)])],
+      telNumberAdd3: ['', Validators.compose([Validators.minLength(9), Validators.maxLength(9)])],
       usersEmail: ['', Validators.compose([Validators.required, Validators.email, Validators.minLength(5),
         Validators.maxLength(35)])],
       sitePrime: ['', Validators.minLength(4)],
@@ -109,10 +110,10 @@ export class StepOneRegisterActionComponent implements OnInit {
       companyName: ['', Validators.compose([Validators.required, Validators.minLength(2),
         Validators.maxLength(40)])],
       companyLogo: [''],
-      telNumberPrime: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(9)])],
-      telNumberAdd1: ['', Validators.compose([Validators.minLength(5), Validators.maxLength(9)])],
-      telNumberAdd2: ['', Validators.compose([Validators.minLength(5), Validators.maxLength(9)])],
-      telNumberAdd3: ['', Validators.compose([Validators.minLength(5), Validators.maxLength(9)])],
+      telNumberPrime: ['', Validators.compose([Validators.required, Validators.minLength(9), Validators.maxLength(9)])],
+      telNumberAdd1: ['', Validators.compose([Validators.minLength(9), Validators.maxLength(9)])],
+      telNumberAdd2: ['', Validators.compose([Validators.minLength(9), Validators.maxLength(9)])],
+      telNumberAdd3: ['', Validators.compose([Validators.minLength(9), Validators.maxLength(9)])],
       usersEmail: ['', Validators.compose([Validators.required, Validators.email])],
       sitePrime: ['', Validators.minLength(4)],
       siteAdd1: ['', Validators.minLength(4)],
@@ -134,18 +135,16 @@ export class StepOneRegisterActionComponent implements OnInit {
 
   addBasicInfo(post): void {
     this.userAction.eventName = post.eventName;
-    if (this.userAction.exactDate && post.startTime) {
-      // this.userAction.exactDate = post.exactDate;
+    if (this.showInterval) {
+      this.userAction.exactDate = null;
+      this.userAction.startTime = null;
+      this.userAction.finishTime = null;
+    }
+    if (!this.showInterval) {
       this.userAction.startTime = post.startTime;
       this.userAction.finishTime = post.finishTime;
       this.userAction.eventStartInterval = null;
       this.userAction.eventFinishInterval = null;
-    } else {
-      this.userAction.exactDate = null;
-      this.userAction.startTime = null;
-      this.userAction.finishTime = null;
-      // this.userAction.eventStartInterval = post.eventStartInterval;
-      // this.userAction.eventFinishInterval = post.eventFinishInterval;
     }
   }
 
@@ -235,6 +234,7 @@ export class StepOneRegisterActionComponent implements OnInit {
       this.minThumbLabel = false;
     }
   }
+
   getMaxPeople(data): void {
     if (this.userAction.minPeople && data.value < this.userAction.minPeople) {
       this.maxThumbLabel = false;
@@ -244,6 +244,7 @@ export class StepOneRegisterActionComponent implements OnInit {
       this.userAction.maxPeople = data.value;
     }
   }
+
   addFormDataDetails(post): void {
     this.userAction.placePicture = post.placePicture;
     this.userAction.getToPlace = post.getToPlace;
@@ -253,8 +254,9 @@ export class StepOneRegisterActionComponent implements OnInit {
     this.getToPlace = post.getToPlace;
     this.preview = true;
   }
+
   getEventLat(coordinates: any[]) {
-    if (this.userAction !== undefined && coordinates !== undefined ) {
+    if (this.userAction !== undefined && coordinates !== undefined) {
       this.eventCoordinates = coordinates;
       this.addressTest.length = 0;
       this.userAction.addressLatitude = coordinates[0];
@@ -266,6 +268,7 @@ export class StepOneRegisterActionComponent implements OnInit {
       this.userAction.addressOfEvent = this.addressTest.join();
     }
   }
+
   getMeetingLat(coordinates: any[]) {
     if (this.userAction !== undefined && coordinates !== undefined && coordinates[2].length !== 0) {
       this.meetingCoordinates = coordinates;
@@ -279,24 +282,29 @@ export class StepOneRegisterActionComponent implements OnInit {
       this.userAction.meetingPlace = this.addressTest.join();
     }
   }
+
   correction(): void {
     this.preview = false;
     this.correct = true;
   }
+
   goPreview(): void {
     this.preview = true;
     this.correct = false;
   }
+
   addExactDate(date) {
     this.userAction.exactDate = date.value;
   }
+
   addStartTime(time) {
     this.userAction.startTime = time.timeStamp;
-    if (this.userAction.exactDate && this.userAction.startTime) {
+    if (this.userAction.exactDate && this.userAction.startTime && !this.showInterval) {
       this.userAction.eventStartInterval = null;
       this.dateValidation = true;
     }
   }
+
   minInterval(date): void {
     console.log(date.value);
     this.incrementedEventStartInterval = new Date(+date.value + 86400000);
@@ -305,37 +313,44 @@ export class StepOneRegisterActionComponent implements OnInit {
       this.dateValidation = true;
     }
   }
+
   maxInterval(date): void {
     this.userAction.eventFinishInterval = date.value;
   }
 
   isCompanyFormDisable(data): void {
-    this.isCitizenName = data.citizenName.length > 2? true : false;
-}
-  isCitizenFormDisable(data): void {
-    this.isCompanyName = data.companyName.length > 2? true : false;
+    this.isCitizenName = data.citizenName.length > 2 ? true : false;
   }
+
+  isCitizenFormDisable(data): void {
+    this.isCompanyName = data.companyName.length > 2 ? true : false;
+  }
+
   getEmptyErrorMessage() {
     return this.eventName.hasError('required') ? 'Введите название акции' : '';
   }
+
   getCitizenErrorMessage() {
     return this.citizenName.hasError('required') ? 'Введите ваше имя' : '';
   }
+
   getCompanyErrorMessage() {
     return this.companyName.hasError('required') ? 'Введите название компании' : '';
   }
+
   getTelErrorMessage() {
     return this.telNumberPrime.hasError('required') ? 'Введите правильный номер' : '';
   }
+
   getEmailErrorMessage() {
     return this.email.hasError('required') ? 'Введите ваш email' :
       this.email.hasError('email') ? 'Email должен содержать - @' :
-      '';
+        '';
   }
+
   setCitizenPhoto(file) {
     let errorMessage: any;
     let toolTipCitizen: any;
-    console.log(document.querySelector('.errorMessage'))
     if (file.target.files[0].type !== 'image/jpeg' && !document.querySelector('.errorMessage')) {
       errorMessage = document.createElement('p');
       errorMessage.innerHTML = 'Прикрепите файл с расширением jpeg/jpg';
@@ -344,20 +359,24 @@ export class StepOneRegisterActionComponent implements OnInit {
       toolTipCitizen.appendChild(errorMessage);
       this.citizenPhotoVariable.nativeElement.value = '';
     }
-    if (file.target.files[0].type === 'image/jpeg'  && document.querySelector('.errorMessage') !== undefined) {
+    if (file.target.files[0].type !== 'image/jpeg' && document.querySelector('.errorMessage') !== undefined) {
+      this.citizenPhotoVariable.nativeElement.value = '';
+    }
+    if (file.target.files[0].type === 'image/jpeg' && document.querySelector('.errorMessage') !== undefined) {
       this.userAction.citizenPhoto = file.target.files[0].name;
       errorMessage = document.querySelector('.errorMessage');
       errorMessage.className = errorMessage.className.replace('errorMessage', 'invisible');
     }
   }
+
   removeCitizenPhoto() {
     this.citizenPhotoVariable.nativeElement.value = '';
+    this.userAction.citizenPhoto = null;
   }
 
   setCompanyPhoto(file) {
     let errorMessage: any;
     let toolTipCompany: any;
-    console.log(document.querySelector('.errorMessage'))
     if (file.target.files[0].type !== 'image/jpeg' && !document.querySelector('.errorMessage')) {
       errorMessage = document.createElement('p');
       errorMessage.innerHTML = 'Прикрепите файл с расширением jpeg/jpg';
@@ -366,7 +385,11 @@ export class StepOneRegisterActionComponent implements OnInit {
       toolTipCompany.appendChild(errorMessage);
       this.companyPhotoVariable.nativeElement.value = '';
     }
-    if (file.target.files[0].type === 'image/jpeg'  && document.querySelector('.errorMessage') !== undefined) {
+    if (file.target.files[0].type !== 'image/jpeg' && document.querySelector('.errorMessage') !== undefined) {
+      this.companyPhotoVariable.nativeElement.value = '';
+    }
+
+    if (file.target.files[0].type === 'image/jpeg' && document.querySelector('.errorMessage') !== undefined) {
       this.userAction.companyPhoto = file.target.files[0].name;
       errorMessage = document.querySelector('.errorMessage');
       errorMessage.className = errorMessage.className.replace('errorMessage', 'invisible');
@@ -374,5 +397,35 @@ export class StepOneRegisterActionComponent implements OnInit {
   }
   removeCompanyPhoto() {
     this.companyPhotoVariable.nativeElement.value = '';
+    this.userAction.companyPhoto = null;
+  }
+  goPrevious(data) {
+    data.preventDefault();
+  }
+
+  setPlacePicture(file) {
+    let errorMessage: any;
+    let toolTipPlacePict: any;
+    if (file.target.files[0].type !== 'image/jpeg' && !document.querySelector('.errorMessage')) {
+      errorMessage = document.createElement('p');
+      errorMessage.innerHTML = 'Прикрепите файл с расширением jpeg/jpg';
+      errorMessage.setAttribute('class', 'errorMessage');
+      toolTipPlacePict = document.querySelector('#toolTipPlacePict');
+      toolTipPlacePict.appendChild(errorMessage);
+      this.placePictVariable.nativeElement.value = '';
+    }
+    if (file.target.files[0].type !== 'image/jpeg' && document.querySelector('.errorMessage') !== undefined) {
+      this.placePictVariable.nativeElement.value = '';
+    }
+
+    if (file.target.files[0].type === 'image/jpeg' && document.querySelector('.errorMessage') !== undefined) {
+      this.userAction.placePicture = file.target.files[0].name;
+      errorMessage = document.querySelector('.errorMessage');
+      errorMessage.className = errorMessage.className.replace('errorMessage', 'invisible');
+    }
+  }
+  removePlacePicture() {
+    this.placePictVariable.nativeElement.value = '';
+    this.userAction.placePicture = null;
   }
 }

@@ -104,7 +104,8 @@ export class MapComponent implements OnInit {
     this.meetingLat(this.coordinates);
   }
 
-  switchMapView(value): void {
+  switchMapView(value, data): void {
+    data.preventDefault();
     this.mapView = value;
   }
 
@@ -113,5 +114,10 @@ export class MapComponent implements OnInit {
   }
   meetingLat(data: any[]) {
     this.getMeetingLat.emit(data);
+  }
+  preventEnter(data: any) {
+    if (data.key === 'Enter') {
+      data.preventDefault();
+    };
   }
 }
