@@ -1,10 +1,10 @@
 <button mat-button (click)="isLinear = true" id="toggle-linear">stepper без валидации</button>
 <mat-card>
   <mat-card-content>
-<p class="mat-body-1">Чтобы создать страницу акции на subbotnik.by, нужно указать информацию, которая
-  будет интересна и важна для потенциальных волонтёров: что это за акция, когда и где она пройдёт,
-  кто её организует, что нужно для участия в ней. Предлагаем внести все эти данные в 3 простых шага.
-  Обязательные поля отмечены звёздочкой (*).</p>
+    <p class="mat-body-1">Чтобы создать страницу акции на subbotnik.by, нужно указать информацию, которая
+      будет интересна и важна для потенциальных волонтёров: что это за акция, когда и где она пройдёт,
+      кто её организует, что нужно для участия в ней. Предлагаем внести все эти данные в 3 простых шага.
+      Обязательные поля отмечены звёздочкой (*).</p>
   </mat-card-content>
 </mat-card>
 <br>
@@ -107,30 +107,30 @@
               <!--<app-citizen></app-citizen>-->
               <form [formGroup]="citizenFormGroup" (ngSubmit)="addFormDataCitizen(citizenFormGroup.value)">
                 <div class="demo-tab-content" [class.disabled]="isCompanyName">
-                    <div>
-                      <label for="citizenName">Как вас зовут?</label>
-                      <div matTooltip='Волонтёрам важно знать, с кем они будут контактировать'
-                           class="formwide-tooltip small-placeholder">
-                        <mat-form-field>
-                          <input matInput id="citizenName" placeholder="Имя и фамилия" formControlName="citizenName"
-                                 required (change)="isCompanyFormDisable(citizenFormGroup.value)">
-                        </mat-form-field>
-                      </div>
+                  <div>
+                    <label for="citizenName">Как вас зовут?</label>
+                    <div matTooltip='Волонтёрам важно знать, с кем они будут контактировать'
+                         class="formwide-tooltip small-placeholder">
+                      <mat-form-field>
+                        <input matInput id="citizenName" placeholder="Имя и фамилия" formControlName="citizenName"
+                               required (change)="isCompanyFormDisable(citizenFormGroup.value)">
+                      </mat-form-field>
                     </div>
-                    <div>
-                      <label for="citizenPhoto">Ваше фото <span class = "small-placeholder">(используйте форматы jpeg/jpg)</span></label>
-                      <div matTooltip='Загрузите свое фото, чтобы при встрече волонтерам было проще вас узнать'
-                           class="formwide-tooltip go-flex" >
-                        <input type="file" id="citizenPhoto" #citizenPhoto formControlName="citizenPhoto"
-                               placeholder="Фото не выбрано" class="marg-top-6" (change)="setCitizenPhoto($event)">
-                        <mat-icon *ngIf="userAction && userAction.citizenPhoto" aria-label="Example icon-button with a heart icon"
-                                  (click)="removeCitizenPhoto()" class="marg-top-6">clear
-                        </mat-icon>
-                      </div>
-
-
-                      <div id= "toolTipCitizen"></div>
+                  </div>
+                  <div>
+                    <label for="citizenPhoto">Ваше фото <span
+                      class="small-placeholder">(используйте форматы jpeg/jpg)</span></label>
+                    <div matTooltip='Загрузите свое фото, чтобы при встрече волонтерам было проще вас узнать'
+                         class="formwide-tooltip go-flex">
+                      <input type="file" id="citizenPhoto" #citizenPhoto formControlName="citizenPhoto"
+                             placeholder="Фото не выбрано" class="marg-top-6" (change)="setCitizenPhoto($event)">
+                      <mat-icon *ngIf="userAction && userAction.citizenPhoto"
+                                aria-label="Example icon-button with a heart icon"
+                                (click)="removeCitizenPhoto()" class="marg-top-6">clear
+                      </mat-icon>
                     </div>
+                    <div id="toolTipCitizen"></div>
+                  </div>
                   <br>
 
                   <mat-card class="example-card">
@@ -164,7 +164,8 @@
                         <div *ngFor="let tel of tels" class="go-flex-no-space">
                           <mat-form-field>
                             <span matPrefix>+375 - &nbsp;</span>
-                            <input matInput minlength="9" maxlength="9" id="tel{{tels.length}}" placeholder="Контактный номер"
+                            <input matInput minlength="9" maxlength="9" id="tel{{tels.length}}"
+                                   placeholder="Контактный номер"
                                    type="tel"
                                    formControlName="telNumberAdd{{tels.length}}">
                           </mat-form-field>
@@ -245,35 +246,36 @@
             <!--Company-->
             <mat-tab [disabled]="isCitizenName" label="Я представитель организации">
               <form [formGroup]="companyFormGroup" (ngSubmit)="addFormDataCompany(companyFormGroup.value)">
-                <div class="demo-tab-content" >
+                <div class="demo-tab-content">
                   <!--<app-company></app-company>-->
                   <div class="demo-tab-content">
 
-                      <div>
-                        <label for="companyName">Как называется ваша организация?</label>
-                        <div matTooltip='Чтобы к вашей акции было больше доверия, лучше указать название организации'
-                             class="formwide-tooltip small-placeholder">
-                          <mat-form-field>
-                            <input matInput id="companyName" placeholder="Название организации"
-                                   formControlName="companyName" required
-                                   (change)="isCitizenFormDisable(companyFormGroup.value)">
-                          </mat-form-field>
-                        </div>
+                    <div>
+                      <label for="companyName">Как называется ваша организация?</label>
+                      <div matTooltip='Чтобы к вашей акции было больше доверия, лучше указать название организации'
+                           class="formwide-tooltip small-placeholder">
+                        <mat-form-field>
+                          <input matInput id="companyName" placeholder="Название организации"
+                                 formControlName="companyName" required
+                                 (change)="isCitizenFormDisable(companyFormGroup.value)">
+                        </mat-form-field>
                       </div>
+                    </div>
 
-                      <div>
-                        <label for="companyPhoto">Ваш логотип <span class = "small-placeholder">(используйте форматы jpeg/jpg)</span></label>
-                        <div matTooltip='Если у вас есть логотип, обязательно добавте его на страницу акции, чтобы вас
+                    <div>
+                      <label for="companyLogo">Ваш логотип <span class="small-placeholder">(используйте форматы jpeg/jpg)</span></label>
+                      <div matTooltip='Если у вас есть логотип, обязательно добавте его на страницу акции, чтобы вас
                                             было проще и быстрее узнать'
-                             class="formwide-tooltip go-flex">
-                          <input type="file" id="companyPhoto" #companyPhoto formControlName="companyLogo"
-                                 placeholder="Фото не выбрано" class="marg-top-6" (change)="setCompanyPhoto($event)">
-                          <mat-icon *ngIf="userAction && userAction.companyPhoto" aria-label="Example icon-button with a heart icon"
-                                    (click)="removeCompanyPhoto()" class="marg-top-6">clear
-                          </mat-icon>
-                        </div>
-                        <div id= "toolTipCompany"></div>
+                           class="formwide-tooltip go-flex">
+                        <input type="file" id="companyLogo" #companyLogo formControlName="companyLogo"
+                               placeholder="Фото не выбрано" class="marg-top-6" (change)="setCompanyLogo($event)">
+                        <mat-icon *ngIf="userAction && userAction.companyLogo"
+                                  aria-label="Example icon-button with a heart icon"
+                                  (click)="removeCompanyLogo()" class="marg-top-6">clear
+                        </mat-icon>
                       </div>
+                      <div id="toolTipCompany"></div>
+                    </div>
                     <br>
 
                     <mat-card class="example-card">
@@ -373,7 +375,7 @@
                       <div>
                         <p>
                           <mat-form-field class="example-full-width">
-                          <textarea matInput rows=3 id = "smthToAdd" formControlName="aboutEvent"
+                          <textarea matInput rows=3 id="smthToAdd" formControlName="aboutEvent"
                                     placeholder="Напишите почему решили организовать акцию и т.д."></textarea>
                           </mat-form-field>
                         </p>
@@ -399,20 +401,22 @@
             <ng-template matStepLabel>Подробности акции</ng-template>
             <section>
               <label for="placePicture" class="subheading-1">Фото места проведения акции
-                <span class = "small-placeholder">(используйте форматы jpeg/jpg)</span></label>
+                <span class="small-placeholder">(используйте форматы jpeg/jpg)</span></label>
               <div matTooltip='Если у вас есть хорошее фото места проведения акции, загрузите его,
                           пожалуйста, чтобы дополнительно вдохновить волонтёров. Минимальный
                           размер: X на Y пикселей (Z мегабайт). Максимальный размер: K на L
                           пикселей (M мегабайт).'
-                   class="formwide-tooltip" id = "toolTipPlacePict">
+                   class="formwide-tooltip" id="toolTipPlacePict">
 
                 <div class="box-upload-picture block-text-center"></div>
                 <div class="go-flex">
-                <input type="file" #placePicture formControlName="placePicture" id="placePicture" (change)="setPlacePicture($event)">
-                <mat-icon *ngIf="userAction && userAction.placePicture" aria-label="Example icon-button with a heart icon"
-                          (click)="removePlacePicture()">clear
-                </mat-icon>
-              </div>
+                  <input type="file" #placePicture formControlName="placePicture" id="placePicture"
+                         (change)="setPlacePicture($event)">
+                  <mat-icon *ngIf="userAction && userAction.placePicture"
+                            aria-label="Example icon-button with a heart icon"
+                            (click)="removePlacePicture()">clear
+                  </mat-icon>
+                </div>
               </div>
               <div matTooltip='Местом сбора может быть остановка транспорта,
                             авто- или ж/д вокзал, местная достопримечательность и т. д.'
@@ -420,7 +424,7 @@
                 <p class="mat-body-1">Где будет место сбора волонтеров?*</p>
               </div>
             </section>
-              <app-map (getMeetingLat)="getMeetingLat($event)"></app-map>
+            <app-map (getMeetingLat)="getMeetingLat($event)"></app-map>
             <br>
 
 
@@ -599,8 +603,9 @@
           <h6 class="mat-subheading-1 ">
             Название мероприятия:
             <mat-form-field><input matInput [(ngModel)]="userAction.eventName" [formControl]="eventName" required>
-            <mat-error *ngIf="eventName.invalid">{{getEmptyErrorMessage()}}</mat-error>
-            </mat-form-field></h6>
+              <mat-error *ngIf="eventName.invalid">{{getEmptyErrorMessage()}}</mat-error>
+            </mat-form-field>
+          </h6>
 
 
           <h6 class="mat-subheading-1">Мероприятие будет проходить:
@@ -621,8 +626,9 @@
               <h6 class="mat-subheading-1 ">Дата проведения:
                 <mat-form-field class="go-flex pos-relative">
                   <input matInput id="actionDatePreview" type="text" [(ngModel)]="userAction.exactDate"
-                         [matDatepicker]="picker"  [min]="minDate" [max]="maxDate" name="exactDate" [formControl]="exactDate">
-                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                         [matDatepicker]="picker" [min]="minDate" [max]="maxDate" name="exactDate"
+                         [formControl]="exactDate">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-datepicker #picker disabled="false"></mat-datepicker>
                 </mat-form-field>
               </h6>
@@ -674,14 +680,39 @@
 
           <h6 *ngIf="isCitizenName" class="mat-subheading-1 ">Организатор:
             <mat-form-field>
-            <input matInput [(ngModel)]="userAction.citizenName" [formControl]="citizenName" required>
+              <input matInput [(ngModel)]="userAction.citizenName" [formControl]="citizenName" required>
               <mat-error *ngIf="citizenName.invalid">{{getCitizenErrorMessage()}}</mat-error>
-          </mat-form-field>
+            </mat-form-field>
           </h6>
 
-          <h6 *ngIf="userAction.citizenPhoto" class="mat-subheading-1 ">Фото организатора:
-            <div class="correct"><input matInput [(ngModel)]="userAction.citizenPhoto"></div>
-          </h6>
+          <!--checking person`s foto-->
+
+          <div *ngIf="isCitizenPhoto" class="go-flex-no-space">
+            <h6 class="mat-subheading-1 ">Фото организатора: </h6>
+            <mat-form-field *ngIf="userAction.citizenPhoto" class="margin-top-minus-1">
+              <input matInput [(ngModel)]="userAction.citizenPhoto">
+            </mat-form-field>
+            <mat-icon *ngIf="userAction.citizenPhoto" aria-label="Example icon-button with a heart icon"
+                      (click)="correctCitizenPhoto()" class="pointer">clear
+            </mat-icon>
+
+            <div *ngIf="!userAction.citizenPhoto" class="d-inline-block margin-top-minus-1">
+              <div matTooltip='Загрузите свое фото, чтобы при встрече волонтерам было проще вас узнать'
+                   class="formwide-tooltip go-flex">
+
+                <input type="file" id="citizenPhotoChange" #citizenPhoto placeholder="Фото не выбрано"
+                       class="marg-top-6" (change)="setCitizenPhoto($event)">
+                <mat-icon *ngIf="userAction && userAction.citizenPhoto"
+                          aria-label="Example icon-button with a heart icon"
+                          (click)="removeCitizenPhoto()">clear
+                </mat-icon>
+              </div>
+              <div id="toolTipCitizen"></div>
+            </div>
+          </div>
+
+          <!--checking company`s logo-->
+
 
           <h6 *ngIf="isCompanyName" class="mat-subheading-1 ">Организатор:
             <mat-form-field>
@@ -690,56 +721,141 @@
             </mat-form-field>
           </h6>
 
+          <div *ngIf="isCompanyLogo" class="go-flex-no-space">
+            <h6 class="mat-subheading-1 ">Логотип компании: </h6>
+            <mat-form-field *ngIf="userAction.companyLogo" class="margin-top-minus-1">
+              <input matInput [(ngModel)]="userAction.companyLogo">
+            </mat-form-field>
+            <mat-icon *ngIf="userAction.companyLogo" aria-label="Example icon-button with a heart icon"
+                      (click)="correctCompanyLogo()" class="pointer">clear
+            </mat-icon>
 
-          <h6 *ngIf="userAction.companyLogo" class="mat-subheading-1 ">Логотип компании:
-            <div class="correct"><input matInput [(ngModel)]="userAction.companyLogo"></div>
-          </h6>
+            <div *ngIf="!userAction.companyLogo" class="d-inline-block margin-top-minus-1">
+              <div matTooltip='Загрузите свое фото, чтобы при встрече волонтерам было проще вас узнать'
+                   class="formwide-tooltip go-flex">
+
+                <input type="file" id="companyLogoChange" #companyLogo placeholder="Логотип не выбран"
+                       class="marg-top-6" (change)="setCompanyLogo($event)">
+                <mat-icon *ngIf="userAction && userAction.companyLogo"
+                          aria-label="Example icon-button with a heart icon"
+                          (click)="removeCompanyLogo()">clear
+                </mat-icon>
+              </div>
+              <div id="toolTipCompany"></div>
+            </div>
+          </div>
+
 
           <mat-card>
             <mat-card-content>
-              <h6 class="mat-subheading-1 ">Основной номер:
-                <mat-form-field>
-                <input matInput [(ngModel)]="userAction.telNumberPrime" required [formControl]="telNumberPrime">
-                <mat-error *ngIf="telNumberPrime.invalid">{{getTelErrorMessage()}}</mat-error>
-                </mat-form-field>
-              </h6>
+              <div>
+                <h6 class="mat-subheading-1">Основной номер :
+                  <div matTooltip='Если с вами можно связаться по нескольким номерам, для надёжности лучше указать все.
+                         При этом первый номер будет считаться основным, а последующие – дополнительными. Формат номера: +375-291234567'
+                       class="formwide-tooltip d-inline-block">
+                    <mat-form-field>
+                      <span matPrefix>+375 - &nbsp;</span>
+                      <input matInput id="citizenPhone" placeholder="Контактный номер" type="tel"
+                             [(ngModel)]="userAction.telNumberPrime" [formControl]="telNumberPrime"
+                             minlength="9" maxlength="9">
+                      <mat-error *ngIf="telNumberPrime.invalid">{{getTelErrorMessage()}}</mat-error>
+                    </mat-form-field>
+                  </div>
+                </h6>
+              </div>
 
-              <h6 *ngIf="userAction.telNumberAdd1" class="mat-subheading-1 ">Дополнительный номер:
-                <div class="correct"><input matInput [(ngModel)]="userAction.telNumberAdd1"></div>
-              </h6>
+              <div>
+                <h6 *ngIf="telNumberAdd1" class="mat-subheading-1 ">Дополнительный номер:
+                  <div matTooltip='Если с вами можно связаться по нескольким номерам, для надёжности лучше указать все.
+                         При этом первый номер будет считаться основным, а последующие – дополнительными. Формат номера: +375-291234567'
+                       class="formwide-tooltip d-inline-block">
+                    <mat-form-field>
+                      <span matPrefix>+375 - &nbsp;</span>
+                      <input matInput placeholder="Контактный номер" type="tel"
+                             [(ngModel)]="userAction.telNumberAdd1" minlength="9" maxlength="9">
+                    </mat-form-field>
+                  </div>
+                    <mat-icon aria-label="Example icon-button with a heart icon"
+                              (click)="removeInput($event)" class="pointer">clear
+                    </mat-icon>
 
-              <h6 *ngIf="userAction.telNumberAdd2" class="mat-subheading-1 ">Дополнительный номер:
-                <div class="correct"><input matInput [(ngModel)]="userAction.telNumberAdd2"></div>
-              </h6>
+                </h6>
+              </div>
+
+
+              <div>
+                <h6 *ngIf="telNumberAdd2" class="mat-subheading-1 ">Дополнительный номер:
+                  <div matTooltip='Если с вами можно связаться по нескольким номерам, для надёжности лучше указать все.
+                         При этом первый номер будет считаться основным, а последующие – дополнительными. Формат номера: +375-291234567'
+                       class="formwide-tooltip d-inline-block">
+                    <mat-form-field>
+                      <span matPrefix>+375 - &nbsp;</span>
+                      <input matInput placeholder="Контактный номер" type="tel"
+                             [(ngModel)]="userAction.telNumberAdd2" minlength="9" maxlength="9">
+                    </mat-form-field>
+                  </div>
+                  <mat-icon aria-label="Example icon-button with a heart icon"
+                            (click)="removeInput($event)" class="pointer">clear
+                  </mat-icon>
+                </h6>
+              </div>
 
               <h6 class="mat-subheading-1">Электронная почта:
                 <mat-form-field>
-                <input matInput [(ngModel)]="userAction.usersEmail" [formControl]="email" required>
+                  <input matInput [(ngModel)]="userAction.usersEmail" [formControl]="email" required>
                   <mat-error *ngIf="email.invalid">{{getEmailErrorMessage()}}</mat-error>
                 </mat-form-field>
               </h6>
 
-              <h6 *ngIf="userAction.sitePrime" class="mat-subheading-1 ">Сайт / соц.сеть:
-                <div class="correct"><input matInput [(ngModel)]="userAction.sitePrime"></div>
-              </h6>
+              <section>
+                <h6 *ngIf="sitePrime" class="mat-subheading-1 ">Сайт / соц.сеть:
+                  <mat-form-field>
+                    <input matInput [(ngModel)]="userAction.sitePrime">
+                  </mat-form-field>
+                  <mat-icon aria-label="Example icon-button with a heart icon"
+                            (click)="removeInput($event)" class="pointer">clear
+                  </mat-icon>
+                </h6>
 
-              <h6 *ngIf="userAction.siteAdd1" class="mat-subheading-1 ">Сайт / соц.сеть:
-                <div class="correct"><input matInput [(ngModel)]="userAction.siteAdd1"></div>
-              </h6>
+                <h6 *ngIf="siteAdd1" class="mat-subheading-1 ">Сайт / соц.сеть:
+                  <mat-form-field>
+                    <input matInput [(ngModel)]="userAction.siteAdd1">
+                  </mat-form-field>
+                  <mat-icon aria-label="Example icon-button with a heart icon"
+                            (click)="removeInput($event)" class="pointer">clear
+                  </mat-icon>
+                </h6>
 
-              <h6 *ngIf="userAction.siteAdd2" class="mat-subheading-1 ">Сайт / соц.сеть:
-                <div class="correct"><input matInput [(ngModel)]="userAction.siteAdd2"></div>
-              </h6>
+                <h6 *ngIf="siteAdd2" class="mat-subheading-1 ">Сайт / соц.сеть:
+                  <mat-form-field>
+                    <input matInput [(ngModel)]="userAction.siteAdd2">
+                  </mat-form-field>
+                  <mat-icon aria-label="Example icon-button with a heart icon"
+                            (click)="removeInput($event)" class="pointer">clear
+                  </mat-icon>
+                </h6>
 
-              <h6 *ngIf="userAction.siteAdd3" class="mat-subheading-1 ">Сайт / соц.сеть:
-                <div class="correct"><input matInput [(ngModel)]="userAction.siteAdd3"></div>
-              </h6>
+                <h6 *ngIf="siteAdd3" class="mat-subheading-1 ">Сайт / соц.сеть:
+                  <mat-form-field>
+                    <input matInput [(ngModel)]="userAction.siteAdd3">
+                  </mat-form-field>
+                  <mat-icon aria-label="Example icon-button with a heart icon"
+                            (click)="removeInput($event)" class="pointer">clear
+                  </mat-icon>
+                </h6>
 
-              <h6 *ngIf="userAction.siteAdd4" class="mat-subheading-1 ">Сайт / соц.сеть:
-                <div class="correct"><input matInput [(ngModel)]="userAction.siteAdd4"></div>
-              </h6>
+                <h6 *ngIf="siteAdd4" class="mat-subheading-1">Сайт / соц.сеть:
+                  <mat-form-field>
+                    <input matInput [(ngModel)]="userAction.siteAdd4">
+                  </mat-form-field>
+                  <mat-icon aria-label="Example icon-button with a heart icon"
+                            (click)="removeInput($event)" class="pointer">clear
+                  </mat-icon>
+                </h6>
+              </section>
             </mat-card-content>
           </mat-card>
+
           <h6 *ngIf="userAction.aboutEvent" class="mat-subheading-1 ">Что бы вы хотели добавить:
             <div class="correct"><input matInput [(ngModel)]="userAction.aboutEvent"></div>
           </h6>
@@ -760,7 +876,6 @@
                                         value="{{userAction.placePicture}}"></div>
           </h6>
 
-
           <h6 class="mat-subheading-1 " *ngIf="userAction.meetingPlace">Место сбора волонтеров:
             {{userAction.meetingPlace}}</h6>
 
@@ -779,10 +894,10 @@
           </div>
 
           <div *ngIf="userAction.whatToDo">
-          <h6 class="mat-subheading-1">Что конкретно нужно будет делать?</h6>
-          <div class="correct">
-            <textarea matInput [(ngModel)]="userAction.whatToDo"></textarea>
-          </div>
+            <h6 class="mat-subheading-1">Что конкретно нужно будет делать?</h6>
+            <div class="correct">
+              <textarea matInput [(ngModel)]="userAction.whatToDo"></textarea>
+            </div>
           </div>
           <div *ngIf="userAction.equipment">
             <h6 class="mat-subheading-1 ">Что нужно взять с собой? Что выдадут на месте?</h6>
@@ -834,7 +949,10 @@
     </mat-card-content>
   </mat-card>
   <div class="block-text-right">
-    <button mat-button (click)="goPreview()" [disabled]="!eventName.valid || !citizenName.valid && !companyName.valid || !telNumberPrime.valid || !email.valid">Предпросмотр</button>
+    <button mat-button (click)="goPreview()"
+            [disabled]="!eventName.valid || !citizenName.valid && !companyName.valid || !telNumberPrime.valid || !email.valid">
+      Предпросмотр
+    </button>
   </div>
 </div>
 

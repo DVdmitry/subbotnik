@@ -14,7 +14,7 @@ import {MapsAPILoader} from '@agm/core';
 
 export class StepOneRegisterActionComponent implements OnInit {
   @ViewChild('citizenPhoto') citizenPhotoVariable: any;
-  @ViewChild('companyPhoto') companyPhotoVariable: any;
+  @ViewChild('companyLogo') companyLogoVariable: any;
   @ViewChild('placePicture') placePictVariable: any;
   isLinear = false;
   correct = false;
@@ -58,10 +58,21 @@ export class StepOneRegisterActionComponent implements OnInit {
   startInterval: any;
   finishInterval: any;
   citizenName: any;
+  citizenPhoto: any;
   companyName: any;
   telNumberPrime: any;
-  email: any;
 
+  email: any;
+  // flags for correction form
+  isCitizenPhoto = false;
+  isCompanyLogo = false;
+  telNumberAdd1: number;
+  telNumberAdd2: number;
+  sitePrime: any;
+  siteAdd1: any;
+  siteAdd2: any;
+  siteAdd3: any;
+  siteAdd4: any;
 
   constructor(private service: AppService, private _formBuilder: FormBuilder, private mapsAPILoader: MapsAPILoader,
               private ngZone: NgZone) {
@@ -76,7 +87,7 @@ export class StepOneRegisterActionComponent implements OnInit {
     this.finishInterval = new FormControl({value: '', disabled: true});
     this.citizenName = new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(40)]);
     this.companyName = new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(40)]);
-    this.telNumberPrime = new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(9)]);
+    this.telNumberPrime = new FormControl('', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]);
     this.email = new FormControl('', [Validators.required, Validators.email]);
 
     this.basicInfoFormGroup = this._formBuilder.group({
@@ -150,7 +161,6 @@ export class StepOneRegisterActionComponent implements OnInit {
 
   addFormDataCompany(post): void {
     this.userAction.companyName = post.companyName;
-    this.userAction.companyLogo = post.companyLogo;
     this.userAction.telNumberPrime = post.telNumberPrime;
     this.userAction.telNumberAdd1 = post.telNumberAdd1;
     this.userAction.telNumberAdd2 = post.telNumberAdd2;
@@ -162,6 +172,13 @@ export class StepOneRegisterActionComponent implements OnInit {
     this.userAction.siteAdd4 = post.siteAdd4;
     this.userAction.aboutEvent = post.aboutEvent;
     this.userAction.personToContact = post.personToContact;
+    this.telNumberAdd1 = this.userAction.telNumberAdd1;
+    this.telNumberAdd2 = this.userAction.telNumberAdd2;
+    this.sitePrime = this.userAction.sitePrime;
+    this.siteAdd1 = this.userAction.siteAdd1;
+    this.siteAdd2 = this.userAction.siteAdd2;
+    this.siteAdd3 = this.userAction.siteAdd3;
+    this.siteAdd4 = this.userAction.siteAdd4;
   }
 
   addFormDataCitizen(post): void {
@@ -176,6 +193,13 @@ export class StepOneRegisterActionComponent implements OnInit {
     this.userAction.siteAdd3 = post.siteAdd3;
     this.userAction.siteAdd4 = post.siteAdd4;
     this.userAction.aboutEvent = post.aboutEvent;
+    this.telNumberAdd1 = this.userAction.telNumberAdd1;
+    this.telNumberAdd2 = this.userAction.telNumberAdd2;
+    this.sitePrime = this.userAction.sitePrime;
+    this.siteAdd1 = this.userAction.siteAdd1;
+    this.siteAdd2 = this.userAction.siteAdd2;
+    this.siteAdd3 = this.userAction.siteAdd3;
+    this.siteAdd4 = this.userAction.siteAdd4;
   }
 
   customInterval(): void {
@@ -342,6 +366,7 @@ export class StepOneRegisterActionComponent implements OnInit {
     return this.telNumberPrime.hasError('required') ? 'Введите правильный номер' : '';
   }
 
+
   getEmailErrorMessage() {
     return this.email.hasError('required') ? 'Введите ваш email' :
       this.email.hasError('email') ? 'Email должен содержать - @' :
@@ -358,12 +383,13 @@ export class StepOneRegisterActionComponent implements OnInit {
       toolTipCitizen = document.querySelector('#toolTipCitizen');
       toolTipCitizen.appendChild(errorMessage);
       this.citizenPhotoVariable.nativeElement.value = '';
-    }
+     }
     if (file.target.files[0].type !== 'image/jpeg' && document.querySelector('.errorMessage') !== undefined) {
       this.citizenPhotoVariable.nativeElement.value = '';
-    }
+         }
     if (file.target.files[0].type === 'image/jpeg' && document.querySelector('.errorMessage') !== undefined) {
       this.userAction.citizenPhoto = file.target.files[0].name;
+      this.isCitizenPhoto = true;
       errorMessage = document.querySelector('.errorMessage');
       errorMessage.className = errorMessage.className.replace('errorMessage', 'invisible');
     }
@@ -374,7 +400,7 @@ export class StepOneRegisterActionComponent implements OnInit {
     this.userAction.citizenPhoto = null;
   }
 
-  setCompanyPhoto(file) {
+  setCompanyLogo(file) {
     let errorMessage: any;
     let toolTipCompany: any;
     if (file.target.files[0].type !== 'image/jpeg' && !document.querySelector('.errorMessage')) {
@@ -383,21 +409,22 @@ export class StepOneRegisterActionComponent implements OnInit {
       errorMessage.setAttribute('class', 'errorMessage');
       toolTipCompany = document.querySelector('#toolTipCompany');
       toolTipCompany.appendChild(errorMessage);
-      this.companyPhotoVariable.nativeElement.value = '';
+      this.companyLogoVariable.nativeElement.value = '';
     }
     if (file.target.files[0].type !== 'image/jpeg' && document.querySelector('.errorMessage') !== undefined) {
-      this.companyPhotoVariable.nativeElement.value = '';
+      this.companyLogoVariable.nativeElement.value = '';
     }
 
     if (file.target.files[0].type === 'image/jpeg' && document.querySelector('.errorMessage') !== undefined) {
-      this.userAction.companyPhoto = file.target.files[0].name;
+      this.userAction.companyLogo = file.target.files[0].name;
+      this.isCompanyLogo = true;
       errorMessage = document.querySelector('.errorMessage');
       errorMessage.className = errorMessage.className.replace('errorMessage', 'invisible');
     }
   }
-  removeCompanyPhoto() {
-    this.companyPhotoVariable.nativeElement.value = '';
-    this.userAction.companyPhoto = null;
+  removeCompanyLogo() {
+    this.companyLogoVariable.nativeElement.value = '';
+    this.userAction.companyLogo = null;
   }
   goPrevious(data) {
     data.preventDefault();
@@ -428,4 +455,15 @@ export class StepOneRegisterActionComponent implements OnInit {
     this.placePictVariable.nativeElement.value = '';
     this.userAction.placePicture = null;
   }
+
+  correctCitizenPhoto() {
+    this.userAction.citizenPhoto = '';
+  }
+  correctCompanyLogo() {
+    this.userAction.companyLogo = '';
+}
+  removeInput(data) {
+    data.target.parentNode.style.display = 'none';
+}
+
 }

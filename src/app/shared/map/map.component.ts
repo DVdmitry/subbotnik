@@ -33,7 +33,7 @@ export class MapComponent implements OnInit {
   ngOnInit() {
 
       // set google maps defaults
-      this.zoom = 4;
+      this.zoom = 14;
       this.latitude = 53.9095161;
       this.longitude = 27.54966079999997;
 
