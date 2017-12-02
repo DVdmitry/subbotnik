@@ -61,11 +61,16 @@ export class StepOneRegisterActionComponent implements OnInit {
   citizenPhoto: any;
   companyName: any;
   telNumberPrime: any;
-
   email: any;
+
+  // flag for tel addition icon
+  showIcon = false;
+  showAddIcon = false;
+
   // flags for correction form
   isCitizenPhoto = false;
   isCompanyLogo = false;
+  isPlacePicture = false;
   telNumberAdd1: number;
   telNumberAdd2: number;
   sitePrime: any;
@@ -73,6 +78,11 @@ export class StepOneRegisterActionComponent implements OnInit {
   siteAdd2: any;
   siteAdd3: any;
   siteAdd4: any;
+  aboutEvent: any;
+  personToContact: any;
+  whatToDo: any;
+  equipment: any;
+  smthElse: any;
 
   constructor(private service: AppService, private _formBuilder: FormBuilder, private mapsAPILoader: MapsAPILoader,
               private ngZone: NgZone) {
@@ -179,6 +189,8 @@ export class StepOneRegisterActionComponent implements OnInit {
     this.siteAdd2 = this.userAction.siteAdd2;
     this.siteAdd3 = this.userAction.siteAdd3;
     this.siteAdd4 = this.userAction.siteAdd4;
+    this.aboutEvent = this.userAction.aboutEvent;
+    this.personToContact = this.userAction.personToContact;
   }
 
   addFormDataCitizen(post): void {
@@ -200,13 +212,27 @@ export class StepOneRegisterActionComponent implements OnInit {
     this.siteAdd2 = this.userAction.siteAdd2;
     this.siteAdd3 = this.userAction.siteAdd3;
     this.siteAdd4 = this.userAction.siteAdd4;
+    this.aboutEvent = this.userAction.aboutEvent;
   }
 
   customInterval(): void {
     this.showInterval = this.showInterval ? false : true;
   }
 
-  addTelField(data): void {
+  showTelIcon(data) {
+    if (data.target.value.length === 9) {
+      this.showIcon = true;
+    }
+  }
+
+  showAddTelIcon(data) {
+    if (data.target.value.length === 9) {
+      this.showAddIcon = true;
+    }
+  }
+
+  addTelField(data, val): void {
+    const telField = document.querySelector('#telField');
     if (this.tels.length < 3) {
       this.tels = [];
       this.tels.push(data.telNumberPrime);
@@ -270,12 +296,14 @@ export class StepOneRegisterActionComponent implements OnInit {
   }
 
   addFormDataDetails(post): void {
-    this.userAction.placePicture = post.placePicture;
     this.userAction.getToPlace = post.getToPlace;
     this.userAction.whatToDo = post.whatToDo;
     this.userAction.equipment = post.equipment;
     this.userAction.smthElse = post.smthElse;
     this.getToPlace = post.getToPlace;
+    this.whatToDo = post.whatToDo;
+    this.equipment = post.equipment;
+    this.smthElse = post.smthElse;
     this.preview = true;
   }
 
@@ -383,10 +411,10 @@ export class StepOneRegisterActionComponent implements OnInit {
       toolTipCitizen = document.querySelector('#toolTipCitizen');
       toolTipCitizen.appendChild(errorMessage);
       this.citizenPhotoVariable.nativeElement.value = '';
-     }
+    }
     if (file.target.files[0].type !== 'image/jpeg' && document.querySelector('.errorMessage') !== undefined) {
       this.citizenPhotoVariable.nativeElement.value = '';
-         }
+    }
     if (file.target.files[0].type === 'image/jpeg' && document.querySelector('.errorMessage') !== undefined) {
       this.userAction.citizenPhoto = file.target.files[0].name;
       this.isCitizenPhoto = true;
@@ -422,10 +450,12 @@ export class StepOneRegisterActionComponent implements OnInit {
       errorMessage.className = errorMessage.className.replace('errorMessage', 'invisible');
     }
   }
+
   removeCompanyLogo() {
     this.companyLogoVariable.nativeElement.value = '';
     this.userAction.companyLogo = null;
   }
+
   goPrevious(data) {
     data.preventDefault();
   }
@@ -447,10 +477,12 @@ export class StepOneRegisterActionComponent implements OnInit {
 
     if (file.target.files[0].type === 'image/jpeg' && document.querySelector('.errorMessage') !== undefined) {
       this.userAction.placePicture = file.target.files[0].name;
+      this.isPlacePicture = true;
       errorMessage = document.querySelector('.errorMessage');
       errorMessage.className = errorMessage.className.replace('errorMessage', 'invisible');
     }
   }
+
   removePlacePicture() {
     this.placePictVariable.nativeElement.value = '';
     this.userAction.placePicture = null;
@@ -459,11 +491,22 @@ export class StepOneRegisterActionComponent implements OnInit {
   correctCitizenPhoto() {
     this.userAction.citizenPhoto = '';
   }
+
   correctCompanyLogo() {
     this.userAction.companyLogo = '';
-}
+  }
+
+  correctPlacePicture() {
+    this.userAction.placePicture = '';
+  }
+
   removeInput(data) {
     data.target.parentNode.style.display = 'none';
-}
+  }
 
+  getCrossIcon(data) {
+    if (data.target.value.length === 0) {
+      data.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[1].style.visibility = 'visible';
+    }
+  }
 }
