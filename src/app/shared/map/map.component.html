@@ -10,7 +10,7 @@
              [(ngModel)]="place">
     </mat-form-field>
   </div>
-  <div *ngIf="place && place.length > 2">
+  <div *ngIf="place && place.length > 0">
     <p>Укажите конкретную точку на карте с помощью геомаркера</p>
     <div class="go-flex-no-space">
       <button mat-button color="basic" class="map-view-btn" (click)="switchMapView('roadMap', $event)"
