@@ -16,6 +16,7 @@ export class StepOneRegisterActionComponent implements OnInit {
   @ViewChild('citizenPhoto') citizenPhotoVariable: any;
   @ViewChild('companyLogo') companyLogoVariable: any;
   @ViewChild('placePicture') placePictVariable: any;
+  @ViewChild('telField') telFieldVar: any;
   isLinear = false;
   correct = false;
   changeEventPlace = false;
@@ -49,6 +50,9 @@ export class StepOneRegisterActionComponent implements OnInit {
   minThumbLabel = true;
   maxThumbLabel = true;
   preview = false;
+  finishDate: any;
+  // primeTel : any;
+  startTime: any;
   @ViewChild('search')
   public searchElementRef: ElementRef;
 
@@ -141,7 +145,7 @@ export class StepOneRegisterActionComponent implements OnInit {
       siteAdd2: ['', Validators.minLength(4)],
       siteAdd3: ['', Validators.minLength(4)],
       siteAdd4: ['', Validators.minLength(4)],
-      personToContact: ['', Validators.minLength(4)],
+      personToContact: ['', Validators.compose([Validators.required, Validators.minLength(4)])],
       aboutEvent: ['', Validators.maxLength(700)],
     });
     this.eventDetailFormGroup = this._formBuilder.group({
@@ -172,8 +176,8 @@ export class StepOneRegisterActionComponent implements OnInit {
   addFormDataCompany(post): void {
     this.userAction.companyName = post.companyName;
     this.userAction.telNumberPrime = post.telNumberPrime;
-    this.userAction.telNumberAdd1 = post.telNumberAdd1;
-    this.userAction.telNumberAdd2 = post.telNumberAdd2;
+    this.userAction.telNumberAdd1 = this.tels[0];
+    this.userAction.telNumberAdd2 = this.tels[1];
     this.userAction.usersEmail = post.usersEmail;
     this.userAction.sitePrime = post.sitePrime;
     this.userAction.siteAdd1 = post.siteAdd1;
@@ -196,10 +200,10 @@ export class StepOneRegisterActionComponent implements OnInit {
   addFormDataCitizen(post): void {
     this.userAction.citizenName = post.citizenName;
     this.userAction.telNumberPrime = post.telNumberPrime;
-    this.userAction.telNumberAdd1 = post.telNumberAdd1;
-    this.userAction.telNumberAdd2 = post.telNumberAdd2;
+    this.userAction.telNumberAdd1 = this.tels[0];
+    this.userAction.telNumberAdd2 = this.tels[1];
     this.userAction.usersEmail = post.usersEmail;
-    this.userAction.sitePrime = post.sitePrime;
+    this.userAction.sitePrime  = post.sitePrime;
     this.userAction.siteAdd1 = post.siteAdd1;
     this.userAction.siteAdd2 = post.siteAdd2;
     this.userAction.siteAdd3 = post.siteAdd3;
@@ -220,29 +224,29 @@ export class StepOneRegisterActionComponent implements OnInit {
   }
 
   showTelIcon(data) {
-    if (data.target.value.length === 9) {
+    if (data.target.value.length === 9 && this.tels.length < 3) {
       this.showIcon = true;
     }
   }
 
-  showAddTelIcon(data) {
-    if (data.target.value.length === 9) {
+  showAddTelIcon(data, index) {
+    if (data.target.value.length === 9 && this.tels.length < 3) {
       this.showAddIcon = true;
+      this.tels[index] = data.target.value;
     }
   }
 
-  addTelField(data, val): void {
-    const telField = document.querySelector('#telField');
-    if (this.tels.length < 3) {
-      this.tels = [];
-      this.tels.push(data.telNumberPrime);
-      if (data.telNumberAdd1) {
-        this.tels.push(data.telNumberAdd1);
-      }
-      if (data.telNumberAdd2) {
-        this.tels.push(data.telNumberAdd2);
-      }
+  addTelField(data): void {
+    if (data.length === 9) {
+      this.tels.push(data);
+   } else {
+      this.tels.push(data.target.parentNode.parentNode.parentNode.parentNode.children[0].firstElementChild.firstElementChild.firstElementChild.lastElementChild.firstElementChild.value);
     }
+  }
+
+  removeTelField(data, index) {
+    this.tels.splice(index, 1);
+    // data.target.parentNode.parentNode.parentNode.parentNode.children[index].firstElementChild.firstElementChild.firstElementChild.lastElementChild.firstElementChild.value = null;
   }
 
   addSiteField(data): void {
@@ -264,6 +268,7 @@ export class StepOneRegisterActionComponent implements OnInit {
     }
   }
 
+
   getMinPeople(data): void {
     if (!this.userAction.maxPeople) {
       this.minThumbLabel = true;
@@ -283,7 +288,7 @@ export class StepOneRegisterActionComponent implements OnInit {
       this.userAction.minPeople = this.minValue;
       this.minThumbLabel = false;
     }
-  }
+  };
 
   getMaxPeople(data): void {
     if (this.userAction.minPeople && data.value < this.userAction.minPeople) {
@@ -358,9 +363,9 @@ export class StepOneRegisterActionComponent implements OnInit {
   }
 
   minInterval(date): void {
-    console.log(date.value);
     this.incrementedEventStartInterval = new Date(+date.value + 86400000);
     this.userAction.eventStartInterval = date.value;
+    this.userAction.eventFinishInterval = this.incrementedEventStartInterval;
     if (this.userAction.eventStartInterval && !this.userAction.startTime) {
       this.dateValidation = true;
     }
@@ -507,6 +512,14 @@ export class StepOneRegisterActionComponent implements OnInit {
   getCrossIcon(data) {
     if (data.target.value.length === 0) {
       data.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[1].style.visibility = 'visible';
+    }
+  }
+  finishDateChange(data, finishDate) {
+    const incrTime = data.value.getTime() + 1000*60*60*24;
+    this.finishDate = new Date();
+    this.finishDate.setTime(data.value.getTime() + 1000*60*60*24);
+    if (data.value > finishDate) {
+      this.userAction.eventFinishInterval = this.finishDate;
     }
   }
 }

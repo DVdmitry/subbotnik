@@ -86,9 +86,6 @@
   color: #3C85FE;
 }
 
-.invisible {
-  display: none;
-}
 
 .disabled {
   pointer-events: none;
@@ -230,3 +227,10 @@ div .mat-slider-horizontal {
 }
 
 
+.invisible {
+  display: none;
+}
+
+.limited {
+  width: 100px;
+}
