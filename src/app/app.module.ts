@@ -21,6 +21,7 @@ import { NavComponent} from './nav/nav.component';
 import { StepOneRegisterActionComponent } from './actions/new-action-one/step-one-register-action.component';
 import { MakeActionComponent } from './actions/make-action/make-action.component';
 import { MapComponent } from './shared/map/map.component';
+import { PublishEventComponent } from './actions/publish-event/publish-event.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { MapComponent } from './shared/map/map.component';
     StepOneRegisterActionComponent,
     MakeActionComponent,
     MapComponent,
+    PublishEventComponent,
   ],
   imports: [
     BrowserModule,
@@ -71,6 +73,10 @@ import { MapComponent } from './shared/map/map.component';
         path: 'main/create-event-page',
         component: StepOneRegisterActionComponent
       },
+      {
+        path: 'publish-event-page',
+        component: PublishEventComponent
+      }
     ])
   ],
   providers: [AppService, { provide: LOCALE_ID, useValue: 'ru' },

@@ -1,0 +1,14 @@
+<mat-card>
+  <div class="big-box d-flex-center pos-relative">
+    <p class='mat-body-1 d-inline-block vert-center'>Ура, картинка</p>
+  </div>
+  <br>
+  <div class="d-flex-center">
+    <h4 class="mat-headline">Поздравляем, страница вашей акции успешно опубликована</h4>
+  </div>
+  <br>
+  <br>
+  <h6 class="mat-subheading-2">Теперь вы можете:</h6>
+  <h6 *ngFor = "let reffer of references" class="mat-subheading-2">
+    <a routerLink="{{reffer.ref}}">{{reffer.name}}</a></h6>
+</mat-card>

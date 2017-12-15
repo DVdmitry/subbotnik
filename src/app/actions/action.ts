@@ -11,6 +11,7 @@ export class Action {
     public eventFinishInterval: any,
     public citizenName: string,
     public citizenPhoto: any,
+	  public companyPhoto: any,
     public companyName: string,
     public companyLogo: string,
     public telNumberPrime: number,
@@ -31,7 +32,7 @@ export class Action {
     public getToPlace: string,
     public whatToDo: string,
     public equipment: string,
-    public  minPeople: number,
+    public minPeople: number,
     public maxPeople: number,
     public smthElse: string,
   ) {}

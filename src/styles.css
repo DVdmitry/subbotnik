@@ -1,7 +1,8 @@
 @import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
 
-a {
+.no-decor {
   text-decoration: none;
+  color: black;
 }
 
 .formwide-tooltip {
@@ -23,6 +24,11 @@ a {
 .go-flex {
   display: flex;
   justify-content: space-between;
+}
+
+.d-flex-center {
+  display: flex;
+  justify-content: center;
 }
 
 .time-form p .marg-top-8{
@@ -57,11 +63,13 @@ a {
   display: flex;
 }
 
-.upload-photo {
-  margin-left: 3%;
+.marg-top-3 {
+  margin-top: 3%;
 }
-#citizenPhoto {
+
+.marg-top-6 {
   margin-top: 6%;
+  position: relative;
 }
 
 .border {
@@ -78,9 +86,6 @@ a {
   color: #3C85FE;
 }
 
-.invisible {
-  display: none;
-}
 
 .disabled {
   pointer-events: none;
@@ -192,7 +197,40 @@ div .mat-slider-horizontal {
   margin: 0 auto;
 }
 
-.absolute {
+.errorMessage {
+  color: red;
+  font-size: 10px;
+}
+
+.hide {
+  visibility: hidden;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.margin-top-minus-1 {
+  margin: -1.3% 0 0 .3%;
+}
+
+.big-box {
+  height: 300px;
+  border: solid #e8e8e8;
+}
+
+.vert-center {
   position: absolute;
-  margin: -8%;
+  top: 43%;
+  padding: 0;
+  margin: 0;
+}
+
+
+.invisible {
+  display: none;
+}
+
+.limited {
+  width: 100px;
 }

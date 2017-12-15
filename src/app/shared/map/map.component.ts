@@ -33,7 +33,7 @@ export class MapComponent implements OnInit {
   ngOnInit() {
 
       // set google maps defaults
-      this.zoom = 4;
+      this.zoom = 14;
       this.latitude = 53.9095161;
       this.longitude = 27.54966079999997;
 
@@ -104,7 +104,8 @@ export class MapComponent implements OnInit {
     this.meetingLat(this.coordinates);
   }
 
-  switchMapView(value): void {
+  switchMapView(value, data): void {
+    data.preventDefault();
     this.mapView = value;
   }
 
@@ -113,5 +114,10 @@ export class MapComponent implements OnInit {
   }
   meetingLat(data: any[]) {
     this.getMeetingLat.emit(data);
+  }
+  preventEnter(data: any) {
+    if (data.key === 'Enter') {
+      data.preventDefault();
+    };
   }
 }
