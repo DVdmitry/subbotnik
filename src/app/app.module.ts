@@ -20,7 +20,7 @@ import { AppComponent } from './app.component';
 import { NavComponent} from './nav/nav.component';
 import { StepOneRegisterActionComponent } from './actions/new-action-one/step-one-register-action.component';
 import { MakeActionComponent } from './actions/make-action/make-action.component';
-import { MapComponent } from './shared/map/map.component';
+import { MapComponent } from './shared/components/map/map.component';
 import { PublishEventComponent } from './actions/publish-event/publish-event.component';
 
 @NgModule({
@@ -29,7 +29,6 @@ import { PublishEventComponent } from './actions/publish-event/publish-event.com
     NavComponent,
     StepOneRegisterActionComponent,
     MakeActionComponent,
-    MapComponent,
     PublishEventComponent,
   ],
   imports: [
@@ -63,6 +62,10 @@ import { PublishEventComponent } from './actions/publish-event/publish-event.com
       {
         path: 'main',
         component: MakeActionComponent
+      },
+      {
+        path: 'create-event',
+        loadChildren: 'app/create-event/create-event.module#CreateEventModule'
       },
       {
         path: '',

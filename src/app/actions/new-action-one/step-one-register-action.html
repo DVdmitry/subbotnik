@@ -120,7 +120,7 @@
                   </div>
                   <div>
                     <label for="citizenPhoto">Ваше фото <span
-                      class="small-placeholder">(используйте форматы jpeg/jpg/png)</span></label>
+                      class="small-placeholder">(используйте форматы jpeg/jpg)</span></label>
                     <div matTooltip='Загрузите свое фото, чтобы при встрече волонтерам было проще вас узнать'
                          class="formwide-tooltip go-flex">
                       <input type="file" id="citizenPhoto" #citizenPhoto formControlName="citizenPhoto"
@@ -269,7 +269,7 @@
                     </div>
 
                     <div>
-                      <label for="companyLogo">Ваш логотип <span class="small-placeholder">(используйте форматы jpeg/jpg/png)</span></label>
+                      <label for="companyLogo">Ваш логотип <span class="small-placeholder">(используйте форматы jpeg/jpg)</span></label>
                       <div matTooltip='Если у вас есть логотип, обязательно добавте его на страницу акции, чтобы вас
                                             было проще и быстрее узнать'
                            class="formwide-tooltip go-flex">
@@ -417,7 +417,7 @@
             <ng-template matStepLabel>Подробности акции</ng-template>
             <section>
               <label for="placePicture" class="subheading-1">Фото места проведения акции
-                <span class="small-placeholder">(используйте форматы jpeg/jpg/png)</span></label>
+                <span class="small-placeholder">(используйте форматы jpeg/jpg)</span></label>
               <div matTooltip='Если у вас есть хорошее фото места проведения акции, загрузите его,
                           пожалуйста, чтобы дополнительно вдохновить волонтёров. Минимальный
                           размер: X на Y пикселей (Z мегабайт). Максимальный размер: K на L
@@ -634,7 +634,7 @@
           <h6 class="mat-subheading-1 ">
             Название мероприятия:
             <mat-form-field><input matInput [(ngModel)]="userAction.eventName" [formControl]="eventName" required>
-              <mat-error *ngIf="eventName.invalid">{{getEmptyErrorMessage()}}</mat-error>
+              <mat-error *ngIf="eventName.invalid">Введите название акции</mat-error>
             </mat-form-field>
           </h6>
 
@@ -714,7 +714,7 @@
           <h6 *ngIf="isCitizenName" class="mat-subheading-1 ">Организатор:
             <mat-form-field>
               <input matInput [(ngModel)]="userAction.citizenName" [formControl]="citizenName" required>
-              <mat-error *ngIf="citizenName.invalid">{{getCitizenErrorMessage()}}</mat-error>
+              <mat-error *ngIf="citizenName.invalid">Введите ваше имя</mat-error>
             </mat-form-field>
           </h6>
 
@@ -751,7 +751,7 @@
           <h6 *ngIf="isCompanyName" class="mat-subheading-1 ">Организатор:
             <mat-form-field>
               <input matInput [(ngModel)]="userAction.companyName" [formControl]="companyName" required>
-              <mat-error *ngIf="companyName.invalid">{{getCompanyErrorMessage()}}</mat-error>
+              <mat-error *ngIf="companyName.invalid">Введите название компании</mat-error>
             </mat-form-field>
           </h6>
 
@@ -762,7 +762,7 @@
                 <input matInput [(ngModel)]="userAction.companyLogo">
               </mat-form-field>
               <mat-icon *ngIf="userAction.companyLogo" aria-label="Example icon-button with a heart icon"
-                        (click)="correctCompanyLogo()" class="pointer">clear
+                        (click)="correctCompanyLogo('companyLogo')" class="pointer">clear
               </mat-icon>
 
               <div *ngIf="!userAction.companyLogo" class="d-inline-block margin-top-minus-1">
@@ -794,7 +794,7 @@
                   <input matInput id="citizenPhone" placeholder="Контактный номер" type="tel"
                          [(ngModel)]="userAction.telNumberPrime" [formControl]="telNumberPrime"
                          minlength="9" maxlength="9">
-                  <mat-error *ngIf="telNumberPrime.invalid">{{getTelErrorMessage()}}</mat-error>
+                  <mat-error *ngIf="telNumberPrime.invalid">Введите правильный номер</mat-error>
                 </mat-form-field>
               </div>
             </h6>

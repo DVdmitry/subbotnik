@@ -1,4 +1,4 @@
-import { InMemoryDbService} from 'angular-in-memory-web-api';
+import {InMemoryDbService} from 'angular-in-memory-web-api';
 
 export class InMemoryDataService implements InMemoryDbService {
   createDb() {
@@ -25,12 +25,40 @@ export class InMemoryDataService implements InMemoryDbService {
       },
     ];
     const action = {
-      name: '',
-      place: '',
-      date: null,
-      startInterval: null,
-      endInterval: null,
-      time: null
+      eventName: '',
+      addressOfEvent: null,
+      addressLatitude: null,
+      addressLongitude: null,
+      exactDate: '',
+      startTime: '',
+      finishTime: '',
+      eventStartInterval: null,
+      eventFinishInterval: null,
+      citizenName: '',
+      citizenPhoto: null,
+      companyName: '',
+      companyLogo: '',
+      telNumberPrime: null,
+      telNumberAdd1: null,
+      telNumberAdd2: null,
+      usersEmail: '',
+      sitePrime: '',
+      siteAdd1: '',
+      siteAdd2: '',
+      siteAdd3: '',
+      siteAdd4: '',
+      aboutEvent: '',
+      personToContact: '',
+      placePicture: null,
+      meetingPlace: null,
+      meetingPlaceLatitude: null,
+      meetingPlaceLongitude: null,
+      getToPlace: '',
+      whatToDo: '',
+      equipment: '',
+      minPeople: null,
+      maxPeople: null,
+      smthElse: '',
     };
     return {navlinks, action};
   }

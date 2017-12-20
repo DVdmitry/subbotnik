@@ -1,10 +1,7 @@
-import {Component, OnInit, ElementRef, NgZone, ViewChild} from '@angular/core';
-import {Action} from '../action';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import { Action } from '../action';
 import {AppService} from '../../app-service';
 import {FormBuilder, FormGroup, FormControl, Validators} from '@angular/forms';
-
-
-import {MapsAPILoader} from '@agm/core';
 
 @Component({
   selector: 'step-one-register-action',
@@ -26,7 +23,9 @@ export class StepOneRegisterActionComponent implements OnInit {
   dateValidation = false;
   incrementedEventStartInterval: any;
   basicInfoFormGroup: FormGroup;
+
   userAction: Action;
+
   meetingLatitude = false;
   eventLatitude = false;
   placePict: string;
@@ -51,21 +50,20 @@ export class StepOneRegisterActionComponent implements OnInit {
   maxThumbLabel = true;
   preview = false;
   finishDate: any;
-  // primeTel : any;
   startTime: any;
-  @ViewChild('search')
-  public searchElementRef: ElementRef;
+  // @ViewChild('search')
+  // public searchElementRef: ElementRef;
 
   // formConrols - formatting form
-  eventName: any;
-  exactDate: any;
-  startInterval: any;
-  finishInterval: any;
-  citizenName: any;
-  citizenPhoto: any;
-  companyName: any;
-  telNumberPrime: any;
-  email: any;
+  eventName: FormControl;
+  exactDate: FormControl;
+  startInterval: FormControl;
+  finishInterval: FormControl;
+  citizenName: FormControl;
+  citizenPhoto: FormControl;
+  companyName: FormControl;
+  telNumberPrime: FormControl;
+  email: FormControl;
 
   // flag for tel addition icon
   showIcon = false;
@@ -88,13 +86,11 @@ export class StepOneRegisterActionComponent implements OnInit {
   equipment: any;
   smthElse: any;
 
-  constructor(private service: AppService, private _formBuilder: FormBuilder, private mapsAPILoader: MapsAPILoader,
-              private ngZone: NgZone) {
+  constructor(private service: AppService, private _formBuilder: FormBuilder) {
   }
 
   ngOnInit(): void {
     this.service.getAction().then(response => this.userAction = response);
-
     this.eventName = new FormControl('', [Validators.required, Validators.minLength(2)]);
     this.exactDate = new FormControl({value: '', disabled: true});
     this.startInterval = new FormControl({value: '', disabled: true});
@@ -383,23 +379,6 @@ export class StepOneRegisterActionComponent implements OnInit {
     this.isCompanyName = data.companyName.length > 2 ? true : false;
   }
 
-  getEmptyErrorMessage() {
-    return this.eventName.hasError('required') ? 'Введите название акции' : '';
-  }
-
-  getCitizenErrorMessage() {
-    return this.citizenName.hasError('required') ? 'Введите ваше имя' : '';
-  }
-
-  getCompanyErrorMessage() {
-    return this.companyName.hasError('required') ? 'Введите название компании' : '';
-  }
-
-  getTelErrorMessage() {
-    return this.telNumberPrime.hasError('required') ? 'Введите правильный номер' : '';
-  }
-
-
   getEmailErrorMessage() {
     return this.email.hasError('required') ? 'Введите ваш email' :
       this.email.hasError('email') ? 'Email должен содержать - @' :
@@ -497,8 +476,8 @@ export class StepOneRegisterActionComponent implements OnInit {
     this.userAction.citizenPhoto = '';
   }
 
-  correctCompanyLogo() {
-    this.userAction.companyLogo = '';
+  correctCompanyLogo(property: string, value = '') {
+    this.userAction[property] = value;
   }
 
   correctPlacePicture() {
