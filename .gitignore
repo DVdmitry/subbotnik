@@ -38,3 +38,7 @@ testem.log
 #System Files
 .DS_Store
 Thumbs.db
+features/заполнение_шага_2.feature
+features/публикация_страницы_акции.feature
+features/публикация_страницы_акции.feature
+features/редактирование_орг.feature
